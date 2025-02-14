@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <declare-styleable name="AppButton">
+        <attr name="btnText" format="string"/>
+        <attr name="btnIcon" format="reference"/>
+        <attr name="btnBackgroundRes" format="reference"/>
+        <attr name="btnDisabledBackgroundRes" format="reference"/>
+        <attr name="btnTextColor" format="color"/>
+        <attr name="isBtnLoading" format="boolean"/>
+    </declare-styleable>
+    
+</resources>

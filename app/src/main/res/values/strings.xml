@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Meal Master</string>
+    <string name="button_icon">Button Icon</string>
+    <string name="onboarding_one_title">Thousands of tested recipes</string>
+    <string name="onboarding_one_body">There is no need to fear failure. Tested recipes are guaranteed to work by our professional chefs.</string>
+    <string name="onboarding_two_body">Take control of your meals! Plan your weekly menu effortlessly, explore delicious meal categories, and get personalized meal suggestions—all in one place.</string>
+    <string name="onboarding_two_title"><![CDATA[Stay Organized & Eat Healthy]]></string>
+    <string name="onboarding_three_title"><![CDATA[Find & Save Your Favorite Meals]]></string>
+    <string name="onboarding_three_body">Search meals using multiple filters and save your favorites to access them anytime—even without an internet connection! Meal planning has never been this simple.</string>
+    <string name="get_started">Get Started</string>
+    <string name="next">Next</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="back_icon">Back Icon</string>
+    <string name="sign_up">Sign up</string>
+    <string name="full_name">Full Name</string>
+    <string name="full_name_error_msg">Full name can\'t be less than 3 characters</string>
+    <string name="email_address">Email Address</string>
+    <string name="email_address_is_invalid">Email address is invalid</string>
+    <string name="password">Password</string>
+    <string name="password_error_msg">Password can\'t be less than 8 charachters</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="sign_up_with_google">Sign up with Google</string>
+    <string name="skip">Skip</string>
+    <string name="already_a_member">Already a member?</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="login_with_facebook">Login With Facebook</string>
+    <string name="not_a_member">Not a member?</string>
+    <string name="default_web_client_id">889662514827-buamf1aeug2k046f9v9iad3hcl2knbp4.apps.googleusercontent.com</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_password_error">Password must match confirm password</string>
+</resources>

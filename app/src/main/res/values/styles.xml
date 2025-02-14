@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <style name="largeTitle">
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="mediumTitle">
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="smallTitle">
+        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="normalText">
+        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="smallText">
+        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="largeLabel">
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="mediumLabel">
+        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    
+</resources>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "889662514827",
+    "project_id": "meal-master-738d1",
+    "storage_bucket": "meal-master-738d1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889662514827:android:66c6b9e913a75aa3b9968e",
+        "android_client_info": {
+          "package_name": "com.ewida.mealmaster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "889662514827-v1lrv1phm0g2543ijcua5rsvbv1a9k0i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ewida.mealmaster",
+            "certificate_hash": "576cdf950db7c0d75520c73a027e44e75751e91e"
+          }
+        },
+        {
+          "client_id": "889662514827-buamf1aeug2k046f9v9iad3hcl2knbp4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZ8FG3lbtX9MZtxROgcdUboZMDYqUltgQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "889662514827-buamf1aeug2k046f9v9iad3hcl2knbp4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
