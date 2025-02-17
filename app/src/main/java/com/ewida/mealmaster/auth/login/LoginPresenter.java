@@ -1,11 +1,17 @@
 package com.ewida.mealmaster.auth.login;
 
+
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.databinding.ObservableArrayList;
+
 import com.ewida.mealmaster.R;
-import com.ewida.mealmaster.model.data_sources.firebase.FirebaseAuthContract;
-import com.ewida.mealmaster.model.data_sources.firebase.FirebaseAuthentication;
+import com.ewida.mealmaster.model.data_sources.firebase.auth.FirebaseAuthContract;
+import com.ewida.mealmaster.model.data_sources.firebase.auth.FirebaseAuthentication;
+import com.ewida.mealmaster.model.data_sources.firebase.database.FirebaseDB;
+import com.ewida.mealmaster.model.data_sources.firebase.database.FirebaseDatabaseContract;
+import com.ewida.mealmaster.model.pojo.User;
 import com.ewida.mealmaster.utils.Constants;
 import com.ewida.mealmaster.utils.enums.FormErrors;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -17,11 +23,13 @@ import com.google.android.gms.tasks.Task;
 public class LoginPresenter implements LoginPresenterContract {
     private final LoginViewContract loginView;
     private final FirebaseAuthContract firebaseAuth;
+    private final FirebaseDatabaseContract firebaseDB;
     private final ObservableArrayList<FormErrors> loginFormErrors;
 
     public LoginPresenter(LoginViewContract loginView) {
         this.loginView = loginView;
         this.firebaseAuth = new FirebaseAuthentication();
+        this.firebaseDB = new FirebaseDB();
         this.loginFormErrors = new ObservableArrayList<>();
     }
 
@@ -30,10 +38,10 @@ public class LoginPresenter implements LoginPresenterContract {
     }
 
     @Override
-    public void handleLoginClick(String email, String password) {
+    public void handleLoginClick(Context context, String email, String password) {
         if (isCredentialValid(email, password)) {
             loginView.showLoaderOnLoginButton();
-            loginWithEmailAndPassword(email, password);
+            loginWithEmailAndPassword(context, email, password);
         }
     }
 
@@ -48,12 +56,29 @@ public class LoginPresenter implements LoginPresenterContract {
         return loginFormErrors.isEmpty();
     }
 
-    private void loginWithEmailAndPassword(String email, String password) {
+    private void loginWithEmailAndPassword(Context context, String email, String password) {
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
+            getUsernameFromDatabase(context, authResult.getUser().getUid());
+        }).addOnFailureListener(error -> {
+            loginView.showErrorMessage(error.getMessage());
+        });
+    }
+
+    private void getUsernameFromDatabase(Context context, String id) {
+        firebaseDB.getUserByID(id).get().addOnSuccessListener(dataSnapshot -> {
+            String username = dataSnapshot.getValue(User.class).getName();
+            saveUserNameInSharedPref(context, username);
             loginView.navigateToHomeScreen();
         }).addOnFailureListener(error -> {
             loginView.showErrorMessage(error.getMessage());
         });
+    }
+
+    private void saveUserNameInSharedPref(Context context, String username) {
+        context.getSharedPreferences(Constants.SharedPref.PREFS_FILE_NAME, Context.MODE_PRIVATE)
+                .edit()
+                .putString(Constants.SharedPref.USER_NAME_KEY, username)
+                .apply();
     }
 
     @Override
@@ -66,10 +91,11 @@ public class LoginPresenter implements LoginPresenterContract {
     }
 
     @Override
-    public void handleGoogleAuthResult(Task<GoogleSignInAccount> completedTask) {
+    public void handleGoogleAuthResult(Context context, Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             firebaseAuth.authWithGoogle(account).addOnSuccessListener(authResult -> {
+                saveUserNameInSharedPref(context,authResult.getUser().getDisplayName());
                 loginView.navigateToHomeScreen();
             }).addOnFailureListener(error -> {
                 loginView.showErrorMessage(error.getMessage());

@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -58,4 +59,21 @@ dependencies {
 
     //Dots Indicator
     implementation(libs.dotsindicator)
+
+    //Shimmer effect
+    implementation (libs.shimmer)
+
+    //Retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.adapter.rxjava3)
+    implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
+
+    //RXJava
+    implementation (libs.rxandroid)
+    implementation (libs.rxjava)
+
+    //Glide
+    implementation (libs.glide)
 }

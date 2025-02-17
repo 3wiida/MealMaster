@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="randomMeal"
+            type="com.ewida.mealmaster.model.pojo.Meal" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".main.home.HomeFragment">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startGuidLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="24dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endGuideLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="24dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/topGuideLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="24dp" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivChef"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:elevation="4dp"
+                android:src="@drawable/chef_home_image"
+                app:shapeAppearanceOverlay="@style/circular_image_view"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                app:layout_constraintTop_toTopOf="@+id/topGuideLine" />
+
+            <TextView
+                android:id="@+id/textView2"
+                style="@style/normalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="2dp"
+                android:text="@string/welcome"
+                android:textColor="@color/textColor"
+                app:layout_constraintStart_toEndOf="@+id/ivChef"
+                app:layout_constraintTop_toTopOf="@+id/topGuideLine" />
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3wiida"
+                style="@style/mediumTitle"
+                android:textColor="@color/onBackgroundColor"
+                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <ImageView
+                android:id="@+id/btnSearch"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_home_search"
+                app:layout_constraintBottom_toBottomOf="@+id/ivChef"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+                app:layout_constraintTop_toTopOf="@+id/topGuideLine" />
+
+            <TextView
+                android:id="@+id/textView3"
+                style="@style/mediumTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/chef_s_surprise_try_this"
+                android:textColor="@color/onBackgroundColor"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                app:layout_constraintTop_toBottomOf="@+id/ivChef" />
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/randomMealShimmer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                app:layout_constraintTop_toBottomOf="@+id/textView3">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="280dp"
+                    android:background="@drawable/bg_random_meal_shimmer"/>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/randomMealCard"
+                android:layout_width="0dp"
+                android:layout_height="280dp"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivRadnomMeal"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/home_random"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/rounded_corner_img_24" />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        style="@style/largeTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="8dp"
+                        android:maxLines="1"
+                        android:text="@{randomMeal.strMeal}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ivRadnomMeal"
+                        tools:text="Spiced Fried Chicken" />
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tvRandomMealCategory"
+                        app:layout_constraintStart_toStartOf="@+id/textView4"
+                        app:layout_constraintTop_toTopOf="@+id/tvRandomMealCategory"
+                        app:srcCompat="@drawable/ic_fork_and_spoon" />
+
+                    <TextView
+                        android:id="@+id/tvRandomMealCategory"
+                        style="@style/normalText"
+                        android:layout_marginTop="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textColor="@color/textColor"
+                        android:textSize="16sp"
+                        android:text="@{randomMeal.strCategory}"
+                        app:layout_constraintStart_toEndOf="@+id/imageView"
+                        app:layout_constraintTop_toBottomOf="@+id/textView4"
+                        tools:text="Lamb" />
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tvRandomMealArea"
+                        app:layout_constraintEnd_toStartOf="@+id/tvRandomMealArea"
+                        app:layout_constraintTop_toTopOf="@+id/tvRandomMealArea"
+                        app:srcCompat="@drawable/ic_earth" />
+
+                    <TextView
+                        android:id="@+id/tvRandomMealArea"
+                        style="@style/normalText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColor"
+                        android:textSize="16sp"
+                        android:text="@{randomMeal.strArea}"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintEnd_toEndOf="@+id/textView4"
+                        app:layout_constraintTop_toTopOf="@+id/tvRandomMealCategory"
+                        tools:text="Italian" />
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toStartOf="@+id/imageView"
+                        app:layout_constraintTop_toBottomOf="@+id/tvRandomMealCategory"
+                        app:srcCompat="@drawable/ic_tags" />
+
+                    <TextView
+                        android:id="@+id/tvTags"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        style="@style/normalText"
+                        tools:text="Soup, Soup"
+                        android:text="@{randomMeal.strTags}"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/textColor"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+                        app:layout_constraintEnd_toEndOf="@+id/tvRandomMealArea"
+                        app:layout_constraintStart_toEndOf="@+id/imageView3"
+                        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/vegetarianFoodLabel"
+                style="@style/mediumTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/meat_free_magic"
+                android:textColor="@color/onBackgroundColor"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                app:layout_constraintTop_toBottomOf="@+id/randomMealShimmer" />
+
+            <include
+                android:id="@+id/vegetarianFoodShimmer"
+                layout="@layout/vegetarian_food_shimmer_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/vegetarianFoodLabel"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvVegetarianMeals"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:visibility="invisible"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/vegetarianFoodLabel"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"/>
+
+            <TextView
+                android:id="@+id/dessertsLabel"
+                style="@style/mediumTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/heavenly_desserts"
+                android:textColor="@color/onBackgroundColor"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                app:layout_constraintTop_toBottomOf="@+id/vegetarianFoodShimmer" />
+
+            <include
+                android:id="@+id/dessertsShimmer"
+                layout="@layout/vegetarian_food_shimmer_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/dessertsLabel"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvDesserts"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:visibility="invisible"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/dessertsLabel"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</layout>

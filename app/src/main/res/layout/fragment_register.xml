@@ -64,14 +64,53 @@
                 app:layout_constraintTop_toBottomOf="@+id/ivBack" />
 
             <TextView
-                android:id="@+id/tvEmailLabel"
+                android:id="@+id/tvNameLabel"
                 style="@style/largeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="@string/email_address"
+                android:text="@string/full_name"
                 app:layout_constraintStart_toStartOf="@+id/glStart"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+            <EditText
+                android:id="@+id/etFullName"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:importantForAutofill="no"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="@string/full_name"
+                android:textCursorDrawable="@drawable/edit_text_cursor"
+                android:background='@{presenter.getFormErrors().contains(FormErrors.INVALID_NAME) ? @drawable/edit_text_error_background : @drawable/edit_text_background  }'
+                android:inputType="textEmailAddress"
+                app:layout_constraintEnd_toStartOf="@+id/glEnd"
+                app:layout_constraintStart_toStartOf="@+id/glStart"
+                app:layout_constraintTop_toBottomOf="@id/tvNameLabel" />
+
+            <TextView
+                android:id="@+id/tvNameError"
+                style="@style/normalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:visibility='@{presenter.getFormErrors().contains(FormErrors.INVALID_NAME)?View.VISIBLE:View.GONE}'
+                tools:visibility="visible"
+                android:text="@string/full_name_error_msg"
+                android:textColor="@color/errorColor"
+                app:layout_constraintStart_toStartOf="@+id/glStart"
+                app:layout_constraintTop_toBottomOf="@+id/etFullName" />
+
+            <TextView
+                android:id="@+id/tvEmailLabel"
+                style="@style/largeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/email_address"
+                app:layout_constraintStart_toStartOf="@+id/glStart"
+                app:layout_constraintTop_toBottomOf="@+id/tvNameError" />
 
             <EditText
                 android:id="@+id/etEmail"
@@ -150,54 +189,6 @@
                 app:layout_constraintStart_toStartOf="@+id/glStart"
                 app:layout_constraintTop_toBottomOf="@+id/etPasswordLayout" />
 
-            <TextView
-                android:id="@+id/tvConfirmPasswordLabel"
-                style="@style/largeLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="@string/confirm_password"
-                app:layout_constraintStart_toStartOf="@+id/glStart"
-                app:layout_constraintTop_toBottomOf="@+id/tvPasswordError" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etConfirmPasswordLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:hintEnabled="false"
-                app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/primaryColor"
-                android:layout_marginTop="8dp"
-                app:boxBackgroundMode="none"
-                app:cursorColor="@color/primaryColor"
-                app:layout_constraintEnd_toStartOf="@+id/glEnd"
-                app:layout_constraintStart_toStartOf="@+id/glStart"
-                app:layout_constraintTop_toBottomOf="@+id/tvConfirmPasswordLabel">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etConfirmPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:hint="@string/confirm_password"
-                    android:background='@{presenter.getFormErrors().contains(FormErrors.INVALID_CONFIRM_PASSWORD) ? @drawable/edit_text_error_background : @drawable/edit_text_background}'
-                    android:inputType="textPassword"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/tvConfirmPasswordError"
-                style="@style/normalText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                tools:visibility="visible"
-                android:visibility='@{presenter.getFormErrors().contains(FormErrors.INVALID_CONFIRM_PASSWORD)?View.VISIBLE:View.GONE}'
-                android:text="@string/confirm_password_error"
-                android:textColor="@color/errorColor"
-                app:layout_constraintStart_toStartOf="@+id/glStart"
-                app:layout_constraintTop_toBottomOf="@+id/etConfirmPasswordLayout" />
-
             <com.ewida.mealmaster.app_components.AppButton
                 android:id="@+id/btnCreateAccount"
                 android:layout_width="0dp"
@@ -207,7 +198,7 @@
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toStartOf="@+id/glEnd"
                 app:layout_constraintStart_toStartOf="@+id/glStart"
-                app:layout_constraintTop_toBottomOf="@+id/tvConfirmPasswordError" />
+                app:layout_constraintTop_toBottomOf="@+id/tvPasswordError" />
 
             <ImageView
                 android:id="@+id/ivOr"

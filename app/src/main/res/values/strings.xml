@@ -31,4 +31,13 @@
     <string name="default_web_client_id">889662514827-buamf1aeug2k046f9v9iad3hcl2knbp4.apps.googleusercontent.com</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="confirm_password_error">Password must match confirm password</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="plans">Plans</string>
+    <string name="saved">Saved</string>
+    <string name="profile">Profile</string>
+    <string name="welcome">Welcome, 👋🏻</string>
+    <string name="chef_s_surprise_try_this">Chef\'s Surprise: Try This!</string>
+    <string name="meat_free_magic">Meat-Free Magic!</string>
+    <string name="heavenly_desserts">Heavenly Desserts!</string>
 </resources>

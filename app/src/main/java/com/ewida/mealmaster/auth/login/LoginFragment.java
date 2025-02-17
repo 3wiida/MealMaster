@@ -9,15 +9,12 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.databinding.FragmentLoginBinding;
@@ -44,9 +41,12 @@ public class LoginFragment extends Fragment implements LoginViewContract {
             if (result.getResultCode() == RESULT_OK) {
                 Intent data = result.getData();
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                presenter.handleGoogleAuthResult(task);
+                presenter.handleGoogleAuthResult(getContext(), task);
             } else {
                 binding.btnGoogleLogin.setLoading(false);
+                binding.btnLogin.setLoading(false);
+                binding.btnSkip.setClickable(true);
+                binding.btnSignup.setClickable(true);
             }
         });
     }
@@ -74,12 +74,14 @@ public class LoginFragment extends Fragment implements LoginViewContract {
     private void loginUser() {
         String email = binding.etEmail.getText().toString().trim();
         String password = binding.etPassword.getText().toString().trim();
-        presenter.handleLoginClick(email, password);
+        presenter.handleLoginClick(getContext(), email, password);
     }
 
     private void startGoogleAuth() {
         binding.btnGoogleLogin.setLoading(true);
         binding.btnLogin.setClickable(false);
+        binding.btnSkip.setClickable(false);
+        binding.btnSignup.setClickable(false);
         googleSignInLauncher.launch(presenter.getGoogleSignInIntent(getContext()));
     }
 
@@ -87,6 +89,8 @@ public class LoginFragment extends Fragment implements LoginViewContract {
     public void showLoaderOnLoginButton() {
         binding.btnLogin.setLoading(true);
         binding.btnGoogleLogin.setClickable(false);
+        binding.btnSkip.setClickable(false);
+        binding.btnSignup.setClickable(false);
     }
 
     @Override
@@ -104,6 +108,8 @@ public class LoginFragment extends Fragment implements LoginViewContract {
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_LONG).show();
         binding.btnLogin.setLoading(false);
         binding.btnGoogleLogin.setLoading(true);
+        binding.btnSkip.setClickable(true);
+        binding.btnSignup.setClickable(true);
     }
 
 }

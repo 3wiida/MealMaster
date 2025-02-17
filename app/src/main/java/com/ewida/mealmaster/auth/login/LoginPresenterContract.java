@@ -9,9 +9,9 @@ import com.google.firebase.auth.AuthResult;
 
 public interface LoginPresenterContract {
 
-    void handleLoginClick(String email, String password);
+    void handleLoginClick(Context context, String email, String password);
 
-    void handleGoogleAuthResult(Task<GoogleSignInAccount> completedTask);
+    void handleGoogleAuthResult(Context context, Task<GoogleSignInAccount> completedTask);
 
     Intent getGoogleSignInIntent(Context context);
 

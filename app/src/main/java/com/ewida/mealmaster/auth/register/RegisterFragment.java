@@ -15,7 +15,6 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.databinding.FragmentRegisterBinding;
@@ -39,9 +38,13 @@ public class RegisterFragment extends Fragment implements RegisterViewContract {
             if (result.getResultCode() == RESULT_OK) {
                 Intent data = result.getData();
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                presenter.handleGoogleAuthResult(task);
-            }else{
+                presenter.handleGoogleAuthResult(getContext(), task);
+            } else {
                 binding.btnGoogleRegister.setLoading(false);
+                binding.btnCreateAccount.setLoading(false);
+                binding.btnLogin.setClickable(true);
+                binding.btnSkip.setClickable(true);
+                binding.ivBack.setClickable(true);
             }
         });
     }
@@ -61,22 +64,25 @@ public class RegisterFragment extends Fragment implements RegisterViewContract {
 
     private void initClicks() {
         binding.btnCreateAccount.setOnClickListener(view -> createAccount());
-        binding.btnGoogleRegister.setOnClickListener(view-> startGoogleAuth());
+        binding.btnGoogleRegister.setOnClickListener(view -> startGoogleAuth());
         binding.btnLogin.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.actionToLoginFragment));
         binding.ivBack.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.actionToLoginFragment));
         binding.btnSkip.setOnClickListener(view -> navigateToHomeScreen());
     }
 
     private void createAccount() {
+        String fullName = binding.etFullName.getText().toString().trim();
         String email = binding.etEmail.getText().toString().trim();
         String password = binding.etPassword.getText().toString().trim();
-        String confirmPassword = binding.etConfirmPassword.getText().toString().trim();
-        presenter.handleCreateAccountClick(email, password, confirmPassword);
+        presenter.handleCreateAccountClick(getContext(), fullName, email, password);
     }
 
-    private void startGoogleAuth(){
+    private void startGoogleAuth() {
         binding.btnGoogleRegister.setLoading(true);
         binding.btnCreateAccount.setClickable(false);
+        binding.btnLogin.setClickable(false);
+        binding.btnSkip.setClickable(false);
+        binding.ivBack.setClickable(false);
         googleAuthLauncher.launch(presenter.getGoogleAuthIntent(getContext()));
     }
 
@@ -84,13 +90,17 @@ public class RegisterFragment extends Fragment implements RegisterViewContract {
     public void showLoaderOnCreateAccountButton() {
         binding.btnCreateAccount.setLoading(true);
         binding.btnGoogleRegister.setClickable(false);
+        binding.btnLogin.setClickable(false);
+        binding.btnSkip.setClickable(false);
+        binding.ivBack.setClickable(false);
+
     }
 
     @Override
     public void navigateToHomeScreen() {
         binding.btnCreateAccount.setLoading(false);
         binding.btnGoogleRegister.setLoading(false);
-        if(getActivity()!=null){
+        if (getActivity() != null) {
             startActivity(new Intent(getActivity(), MainActivity.class));
             getActivity().finish();
         }
@@ -101,6 +111,9 @@ public class RegisterFragment extends Fragment implements RegisterViewContract {
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_LONG).show();
         binding.btnCreateAccount.setLoading(false);
         binding.btnGoogleRegister.setLoading(false);
+        binding.btnLogin.setClickable(true);
+        binding.btnSkip.setClickable(true);
+        binding.ivBack.setClickable(true);
     }
 
 }
