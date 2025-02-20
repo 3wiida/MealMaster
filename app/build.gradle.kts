@@ -76,4 +76,7 @@ dependencies {
 
     //Glide
     implementation (libs.glide)
+
+    //Youtube Player View
+    implementation (libs.core)
 }

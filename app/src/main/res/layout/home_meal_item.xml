@@ -6,7 +6,7 @@
     <data>
         <variable
             name="meal"
-            type="com.ewida.mealmaster.model.pojo.CategoryMeal" />
+            type="com.ewida.mealmaster.data.model.CategoryMeal" />
     </data>
 
     <androidx.cardview.widget.CardView

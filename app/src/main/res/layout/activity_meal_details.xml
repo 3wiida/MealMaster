@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="meal"
+            type="com.ewida.mealmaster.data.model.Meal" />
+    </data>
+
+    <ScrollView
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/loadingLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/meal_details_loading_layout" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dataConstraint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:id="@+id/ivMealThumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/home_random"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/icSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="42dp"
+                    android:layout_marginEnd="24dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_saved" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/startGuidLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="24dp" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/endGuidLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="24dp" />
+
+                <TextView
+                    android:id="@+id/tvMealTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:textColor="@color/onBackgroundColor"
+                    style="@style/largeTitle"
+                    android:text="@{meal.strMeal}"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuidLine"
+                    app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                    app:layout_constraintTop_toBottomOf="@+id/ivMealThumbnail" />
+
+                <ImageView
+                    android:id="@+id/ivCategory"
+                    app:srcCompat="@drawable/ic_fork_and_spoon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMealTitle" />
+
+                <TextView
+                    android:id="@+id/tvMealCategory"
+                    style="@style/normalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/textColor"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivCategory"
+                    app:layout_constraintStart_toEndOf="@+id/ivCategory"
+                    app:layout_constraintTop_toTopOf="@+id/ivCategory"
+                    android:text="@{meal.strCategory}" />
+
+                <ImageView
+                    android:id="@+id/icEarth"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivCategory"
+                    app:layout_constraintEnd_toStartOf="@+id/tvMealArea"
+                    app:layout_constraintTop_toTopOf="@+id/ivCategory"
+                    app:srcCompat="@drawable/ic_earth" />
+
+                <TextView
+                    android:id="@+id/tvMealArea"
+                    style="@style/normalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/icEarth"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuidLine"
+                    app:layout_constraintTop_toTopOf="@+id/icEarth"
+                    android:text="@{meal.strArea}" />
+
+                <ImageView
+                    android:id="@+id/icTags"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                    app:layout_constraintTop_toBottomOf="@+id/ivCategory"
+                    app:srcCompat="@drawable/ic_tags" />
+
+                <TextView
+                    android:id="@+id/tvTags"
+                    style="@style/normalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/textColor"
+                    app:layout_constraintBottom_toBottomOf="@+id/icTags"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuidLine"
+                    app:layout_constraintStart_toEndOf="@+id/icTags"
+                    app:layout_constraintTop_toTopOf="@+id/icTags"
+                    android:text="@{meal.strTags}" />
+
+                <TextView
+                    android:id="@+id/tvIngredientsLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/ingredients"
+                    style="@style/largeTitle"
+                    android:textColor="@color/onBackgroundColor"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuidLine"
+                    app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                    app:layout_constraintTop_toBottomOf="@+id/icTags" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvIngredients"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"
+                    tools:listitem="@layout/ingredient_item_layout"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuidLine"
+                    app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                    app:layout_constraintTop_toBottomOf="@+id/tvIngredientsLabel" />
+
+                <TextView
+                    android:id="@+id/tvInstructionsLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/instructions"
+                    style="@style/largeTitle"
+                    android:textColor="@color/onBackgroundColor"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuidLine"
+                    app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                    app:layout_constraintTop_toBottomOf="@+id/rvIngredients" />
+
+                <TextView
+                    android:id="@+id/tvInstructions"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    style="@style/normalText"
+                    android:text="@{meal.strInstructions}"
+                    android:textColor="@color/textColor"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuidLine"
+                    app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                    app:layout_constraintTop_toBottomOf="@+id/tvInstructionsLabel"/>
+
+                <TextView
+                    android:id="@+id/tvVideoLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/video"
+                    android:visibility="@{meal.strYoutube==null? View.GONE:View.VISIBLE}"
+                    style="@style/largeTitle"
+                    android:textColor="@color/onBackgroundColor"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuidLine"
+                    app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                    app:layout_constraintTop_toBottomOf="@+id/tvInstructions" />
+
+                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                    android:id="@+id/youtubeVideoPlayer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{meal.strYoutube==null? View.GONE:View.VISIBLE}"
+                    android:layout_marginTop="8dp"
+                    app:autoPlay="false"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuidLine"
+                    app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                    app:layout_constraintTop_toBottomOf="@+id/tvVideoLabel"
+                    app:flow_firstVerticalBias="0.0"
+                    android:layout_marginBottom="38dp"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/icBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="42dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_back" />
+            </androidx.cardview.widget.CardView>
+
+        </FrameLayout>
+
+    </ScrollView>
+</layout>

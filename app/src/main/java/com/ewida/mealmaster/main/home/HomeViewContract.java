@@ -1,7 +1,7 @@
 package com.ewida.mealmaster.main.home;
 
-import com.ewida.mealmaster.model.pojo.CategoryMeal;
-import com.ewida.mealmaster.model.pojo.Meal;
+import com.ewida.mealmaster.data.model.CategoryMeal;
+import com.ewida.mealmaster.data.model.Meal;
 
 import java.util.List;
 

@@ -10,18 +10,20 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.databinding.HomeMealItemBinding;
-import com.ewida.mealmaster.model.pojo.CategoryMeal;
+import com.ewida.mealmaster.data.model.CategoryMeal;
 
 import java.util.List;
 
 public class HomeMealsAdapter extends RecyclerView.Adapter<HomeMealsAdapter.ItemViewHolder> {
 
-    private List<CategoryMeal> meals;
-    private boolean isVegetarian;
+    private final List<CategoryMeal> meals;
+    private final boolean isVegetarian;
+    private final OnMealClickListener onMealClickListener;
 
-    public HomeMealsAdapter(List<CategoryMeal> meals, boolean isVegetarian) {
+    public HomeMealsAdapter(List<CategoryMeal> meals, boolean isVegetarian, OnMealClickListener onMealClickListener) {
         this.meals = meals;
         this.isVegetarian = isVegetarian;
+        this.onMealClickListener = onMealClickListener;
     }
 
     @NonNull
@@ -53,7 +55,14 @@ public class HomeMealsAdapter extends RecyclerView.Adapter<HomeMealsAdapter.Item
             Glide.with(binding.ivMeal).load(meal.getStrMealThumb()).placeholder(R.drawable.image_placeholder).transition(DrawableTransitionOptions.withCrossFade()).into(binding.ivMeal);
             binding.setMeal(meal);
             binding.iconMeal.setImageResource(isVegetarian ? R.drawable.ic_vegetarian : R.drawable.ic_dessert);
+            binding.getRoot().setOnClickListener(view -> {
+                onMealClickListener.onMealClicked(meal);
+            });
         }
+    }
+
+    public interface OnMealClickListener {
+        void onMealClicked(CategoryMeal meal);
     }
 
 }

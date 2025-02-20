@@ -13,4 +13,5 @@
     <color name="disabledTextColor">#999999</color>
     <color name="errorColor">#FA1212</color>
     <color name="borderColor">#CCCCCC</color>
+    <color name="shimmerColor">#C2C2C2</color>
 </resources>

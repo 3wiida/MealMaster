@@ -8,7 +8,7 @@ import com.ewida.mealmaster.model.data_sources.firebase.auth.FirebaseAuthContrac
 import com.ewida.mealmaster.model.data_sources.firebase.auth.FirebaseAuthentication;
 import com.ewida.mealmaster.model.data_sources.firebase.database.FirebaseDB;
 import com.ewida.mealmaster.model.data_sources.firebase.database.FirebaseDatabaseContract;
-import com.ewida.mealmaster.model.pojo.User;
+import com.ewida.mealmaster.data.model.User;
 import com.ewida.mealmaster.utils.Constants;
 import com.ewida.mealmaster.utils.enums.FormErrors;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

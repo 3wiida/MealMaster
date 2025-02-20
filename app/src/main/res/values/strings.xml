@@ -40,4 +40,8 @@
     <string name="chef_s_surprise_try_this">Chef\'s Surprise: Try This!</string>
     <string name="meat_free_magic">Meat-Free Magic!</string>
     <string name="heavenly_desserts">Heavenly Desserts!</string>
+    <string name="description">Description</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="instructions">Instructions</string>
+    <string name="video">Video</string>
 </resources>

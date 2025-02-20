@@ -10,7 +10,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.auth.AuthActivity;
 import com.ewida.mealmaster.databinding.ActivityOnboardingBinding;
-import com.ewida.mealmaster.model.pojo.OnboardingItem;
+import com.ewida.mealmaster.data.model.OnboardingItem;
 import com.ewida.mealmaster.utils.Constants;
 
 import java.util.ArrayList;

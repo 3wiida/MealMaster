@@ -6,7 +6,7 @@
     <data>
         <variable
             name="randomMeal"
-            type="com.ewida.mealmaster.model.pojo.Meal" />
+            type="com.ewida.mealmaster.data.model.Meal" />
     </data>
 
     <ScrollView

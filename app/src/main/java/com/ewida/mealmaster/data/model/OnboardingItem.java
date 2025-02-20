@@ -1,4 +1,4 @@
-package com.ewida.mealmaster.model.pojo;
+package com.ewida.mealmaster.data.model;
 
 public class OnboardingItem {
     private int image;

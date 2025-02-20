@@ -1,4 +1,4 @@
-package com.ewida.mealmaster.model.pojo;
+package com.ewida.mealmaster.data.model;
 
 import java.util.List;
 

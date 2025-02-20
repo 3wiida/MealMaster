@@ -1,13 +1,11 @@
 package com.ewida.mealmaster.main.home;
 
-import com.ewida.mealmaster.model.pojo.CategoryMealsResponse;
-import com.ewida.mealmaster.model.pojo.Meal;
-import com.ewida.mealmaster.model.pojo.RandomMealResponse;
-import com.ewida.mealmaster.network.ApiClient;
-
+import com.ewida.mealmaster.data.model.CategoryMealsResponse;
+import com.ewida.mealmaster.data.model.Meal;
+import com.ewida.mealmaster.data.model.MealResponse;
+import com.ewida.mealmaster.data.repository.MealsRepository;
 import java.util.Arrays;
 import java.util.List;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.SingleObserver;
@@ -17,16 +15,16 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class HomePresenter implements HomePresenterContract {
 
     private final HomeViewContract homeView;
-    private final String VEGETARIAN_CATEGORY_FILTER = "Vegetarian";
-    private final String DESSERTS_CATEGORY_FILTER = "Dessert";
+    private final MealsRepository repo;
 
-    public HomePresenter(HomeViewContract homeView) {
+    public HomePresenter(HomeViewContract homeView, MealsRepository repo) {
         this.homeView = homeView;
+        this.repo = repo;
     }
 
     @Override
     public void getRandomMeal() {
-        ApiClient.getInstance().getRandomMeal()
+        repo.getRandomMeal()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<>() {
@@ -35,8 +33,8 @@ public class HomePresenter implements HomePresenterContract {
                     }
 
                     @Override
-                    public void onSuccess(@NonNull RandomMealResponse randomMealResponse) {
-                        homeView.showRandomMeal(getRefactoredMeal(randomMealResponse));
+                    public void onSuccess(@NonNull MealResponse randomMealResponse) {
+                        homeView.showRandomMeal(randomMealResponse.getMeals().get(0));
                     }
 
                     @Override
@@ -48,7 +46,7 @@ public class HomePresenter implements HomePresenterContract {
 
     @Override
     public void getVegetarianMeals() {
-        ApiClient.getInstance().getCategoryMeals(VEGETARIAN_CATEGORY_FILTER)
+        repo.getCategoryMeals("Vegetarian")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<>() {
@@ -69,7 +67,7 @@ public class HomePresenter implements HomePresenterContract {
 
     @Override
     public void getDesserts() {
-        ApiClient.getInstance().getCategoryMeals(DESSERTS_CATEGORY_FILTER)
+        repo.getCategoryMeals("Dessert")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<>() {
@@ -88,7 +86,7 @@ public class HomePresenter implements HomePresenterContract {
                 });
     }
 
-    private Meal getRefactoredMeal(RandomMealResponse response) {
+    /*private Meal getRefactoredMeal(MealResponse response) {
         Meal meal = response.getMeals().get(0);
         if (meal.getStrTags() == null || meal.getStrTags().trim().equals(" ")) {
             meal.setStrTags("N/A");
@@ -104,5 +102,5 @@ public class HomePresenter implements HomePresenterContract {
             meal.setStrTags(refactoredTags.toString());
         }
         return meal;
-    }
+    }*/
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ingredient"
+            type="com.ewida.mealmaster.data.model.Ingredient" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="200dp"
+            android:layout_marginVertical="4dp"
+            app:cardElevation="2dp">
+
+            <ImageView
+                android:id="@+id/ivIngredient"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                tools:src="@drawable/lime" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvIngredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            style="@style/normalText"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="@color/textColor"
+            android:text="@{ingredient.quantity + ` of ` + ingredient.name}" />
+    </LinearLayout>
+</layout>

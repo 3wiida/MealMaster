@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.ewida.mealmaster.databinding.OnboardingItemLayoutBinding;
-import com.ewida.mealmaster.model.pojo.OnboardingItem;
+import com.ewida.mealmaster.data.model.OnboardingItem;
 import java.util.List;
 
 public class OnboardingPagerAdapter extends RecyclerView.Adapter<OnboardingPagerAdapter.ItemViewHolder> {
