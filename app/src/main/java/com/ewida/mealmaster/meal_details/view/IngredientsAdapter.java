@@ -51,7 +51,6 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             binding.setIngredient(ingredient);
             Glide.with(binding.ivIngredient)
                     .load(ingredient.getThumbnail())
-                    .placeholder(R.drawable.ic_ingredient_placeholder)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.ivIngredient);
         }

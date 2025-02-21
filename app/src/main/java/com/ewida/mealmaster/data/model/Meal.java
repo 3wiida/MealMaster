@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -315,8 +316,10 @@ public class Meal implements Parcelable {
     }
 
     public String getStrYoutube() {
-        if(this.strYoutube!=null){
-            return this.strYoutube.split("v=")[1];
+        if (this.strYoutube != null) {
+            if(!this.strYoutube.trim().isEmpty()){
+                return this.strYoutube.split("v=")[1];
+            }
         }
         return null;
     }
@@ -465,6 +468,11 @@ public class Meal implements Parcelable {
         dest.writeString(strMeasure17);
         dest.writeString(strMeasure14);
         dest.writeString(strMeasure15);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return super.equals(obj);
     }
 }
 

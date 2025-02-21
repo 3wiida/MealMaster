@@ -25,6 +25,7 @@ import com.ewida.mealmaster.databinding.FragmentHomeBinding;
 import com.ewida.mealmaster.data.model.CategoryMeal;
 import com.ewida.mealmaster.data.model.Meal;
 import com.ewida.mealmaster.meal_details.view.MealDetailsActivity;
+import com.ewida.mealmaster.search.view.SearchActivity;
 import com.ewida.mealmaster.utils.Constants;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -59,6 +60,10 @@ public class HomeFragment extends Fragment implements HomeViewContract, HomeMeal
             Intent mealDetailsIntent = new Intent(getActivity(), MealDetailsActivity.class);
             mealDetailsIntent.putExtra(MealDetailsActivity.MEAL_OBJECT_EXTRA, randomMeal);
             startActivity(mealDetailsIntent);
+        });
+
+        binding.btnSearch.setOnClickListener(view -> {
+            startActivity(new Intent(getActivity(), SearchActivity.class));
         });
     }
 

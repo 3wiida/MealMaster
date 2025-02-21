@@ -58,4 +58,9 @@ public class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
     public Single<MealResponse> getMealById(String id) {
         return apiServices.getMealById(id);
     }
+
+    @Override
+    public Single<MealResponse> search(String query) {
+        return apiServices.search(query);
+    }
 }

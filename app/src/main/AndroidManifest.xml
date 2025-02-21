@@ -15,8 +15,11 @@
         android:theme="@style/Theme.MealMaster"
         tools:targetApi="31">
         <activity
+            android:name=".search.view.SearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".meal_details.view.MealDetailsActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".main.MainActivity"
             android:exported="false" />
