@@ -1,7 +1,11 @@
 package com.ewida.mealmaster.data.datasource.remote;
 
 import android.util.Log;
+
+import com.ewida.mealmaster.data.model.AreasResponse;
+import com.ewida.mealmaster.data.model.CategoriesResponse;
 import com.ewida.mealmaster.data.model.CategoryMealsResponse;
+import com.ewida.mealmaster.data.model.IngredientsResponse;
 import com.ewida.mealmaster.data.model.MealResponse;
 import io.reactivex.rxjava3.core.Single;
 import okhttp3.OkHttpClient;
@@ -62,5 +66,20 @@ public class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
     @Override
     public Single<MealResponse> search(String query) {
         return apiServices.search(query);
+    }
+
+    @Override
+    public Single<CategoriesResponse> getAllCategories() {
+        return apiServices.getAllCategories();
+    }
+
+    @Override
+    public Single<AreasResponse> getAllAreas() {
+        return apiServices.getAllAreas("list");
+    }
+
+    @Override
+    public Single<IngredientsResponse> getAllIngredients() {
+        return apiServices.getAllIngredients("list");
     }
 }

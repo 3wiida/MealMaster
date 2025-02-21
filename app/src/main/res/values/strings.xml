@@ -51,4 +51,8 @@
     <string name="we_couldn_t_find_any_matches_try_a_different_keyword">We couldn’t find any matches. Try a different keyword!</string>
     <string name="start_searching">Start Searching</string>
     <string name="type_something_to_find_what_you_re_looking_for">Type something to find what you\'re looking for!</string>
+    <string name="explore">Explore</string>
+    <string name="by_category">By Category</string>
+    <string name="by_area">By Area</string>
+    <string name="by_ingredient">By Ingredient</string>
 </resources>

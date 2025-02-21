@@ -1,6 +1,9 @@
 package com.ewida.mealmaster.data.datasource.remote;
 
+import com.ewida.mealmaster.data.model.AreasResponse;
+import com.ewida.mealmaster.data.model.CategoriesResponse;
 import com.ewida.mealmaster.data.model.CategoryMealsResponse;
+import com.ewida.mealmaster.data.model.IngredientsResponse;
 import com.ewida.mealmaster.data.model.MealResponse;
 
 import io.reactivex.rxjava3.core.Single;
@@ -20,4 +23,13 @@ public interface ApiServices {
 
     @GET("search.php")
     Single<MealResponse> search(@Query("s") String query);
+
+    @GET("categories.php")
+    Single<CategoriesResponse> getAllCategories();
+
+    @GET("list.php")
+    Single<AreasResponse> getAllAreas(@Query("a") String list);
+
+    @GET("list.php")
+    Single<IngredientsResponse> getAllIngredients(@Query("i") String list);
 }

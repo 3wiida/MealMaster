@@ -1,7 +1,10 @@
 package com.ewida.mealmaster.data.repository;
 
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSource;
+import com.ewida.mealmaster.data.model.AreasResponse;
+import com.ewida.mealmaster.data.model.CategoriesResponse;
 import com.ewida.mealmaster.data.model.CategoryMealsResponse;
+import com.ewida.mealmaster.data.model.IngredientsResponse;
 import com.ewida.mealmaster.data.model.MealResponse;
 import io.reactivex.rxjava3.core.Single;
 
@@ -39,5 +42,20 @@ public class MealsRepositoryImpl implements MealsRepository{
     @Override
     public Single<MealResponse> search(String query) {
         return remoteDataSource.search(query);
+    }
+
+    @Override
+    public Single<CategoriesResponse> getAllCategories() {
+        return remoteDataSource.getAllCategories();
+    }
+
+    @Override
+    public Single<AreasResponse> getAllAreas() {
+        return remoteDataSource.getAllAreas();
+    }
+
+    @Override
+    public Single<IngredientsResponse> getAllIngredients() {
+        return remoteDataSource.getAllIngredients();
     }
 }

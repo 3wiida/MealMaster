@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.ewida.mealmaster.main.search.SearchFragment"
+        android:name="com.ewida.mealmaster.main.explore.view.ExploreFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_explore" />
     <fragment
         android:id="@+id/plansFragment"
         android:name="com.ewida.mealmaster.main.plans.PlansFragment"
