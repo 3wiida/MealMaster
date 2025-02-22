@@ -234,7 +234,7 @@
 
             <include
                 android:id="@+id/vegetarianFoodShimmer"
-                layout="@layout/vegetarian_food_shimmer_layout"
+                layout="@layout/home_meal_shimmer_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -267,7 +267,7 @@
 
             <include
                 android:id="@+id/dessertsShimmer"
-                layout="@layout/vegetarian_food_shimmer_layout"
+                layout="@layout/home_meal_shimmer_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

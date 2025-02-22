@@ -55,4 +55,8 @@
     <string name="by_category">By Category</string>
     <string name="by_area">By Area</string>
     <string name="by_ingredient">By Ingredient</string>
+    <string name="search_for">Search For...</string>
+    <string name="ingredient">Ingredient</string>
+    <string name="area">Area</string>
+    <string name="category">Category</string>
 </resources>

@@ -49,69 +49,181 @@
                 app:layout_constraintStart_toStartOf="@+id/startGuidLine"
                 app:layout_constraintTop_toTopOf="@+id/topGuideLine" />
 
-            <TextView
-                android:id="@+id/tvByCategoryLabel"
-                style="@style/mediumTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/by_category"
+            <EditText
+                android:id="@+id/etSearch"
+                style="@style/normalText"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/search_bar_bg"
+                android:drawableEnd="@drawable/ic_home_search"
+                android:hint="@string/search_for"
+                android:maxLines="1"
+                android:paddingHorizontal="16dp"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
                 app:layout_constraintStart_toStartOf="@+id/startGuidLine"
                 app:layout_constraintTop_toBottomOf="@+id/tvExploreLabel" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvCategories"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
-                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
-                app:layout_constraintTop_toBottomOf="@+id/tvByCategoryLabel" />
-
-            <TextView
-                android:id="@+id/tvByAreaLabel"
-                style="@style/mediumTitle"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/searchChipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/by_area"
-                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
-                app:layout_constraintTop_toBottomOf="@+id/rvCategories" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvAreas"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="horizontal"
                 app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
                 app:layout_constraintStart_toStartOf="@+id/startGuidLine"
-                app:layout_constraintTop_toBottomOf="@+id/tvByAreaLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/etSearch"
+                app:singleSelection="true">
 
-            <TextView
-                android:id="@+id/tvByIngredientLabel"
-                style="@style/mediumTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/by_ingredient"
-                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
-                app:layout_constraintTop_toBottomOf="@+id/rvAreas" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipCategory"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/category"
+                    android:textAlignment="center"
+                    android:textColor="@color/explore_chip_text_color"
+                    app:chipBackgroundColor="@color/explore_chip_color" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipArea"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/area"
+                    android:textAlignment="center"
+                    android:textColor="@color/explore_chip_text_color"
+                    app:chipBackgroundColor="@color/explore_chip_color" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipIngredient"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ingredient"
+                    android:textAlignment="center"
+                    android:textColor="@color/explore_chip_text_color"
+                    app:chipBackgroundColor="@color/explore_chip_color" />
+            </com.google.android.material.chip.ChipGroup>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvIngredients"
+                android:id="@+id/rvSearchResults"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
                 android:nestedScrollingEnabled="false"
                 app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
                 app:layout_constraintStart_toStartOf="@+id/startGuidLine"
-                app:layout_constraintTop_toBottomOf="@+id/tvByIngredientLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/searchChipGroup" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/sectionsGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                app:layout_constraintTop_toBottomOf="@+id/searchChipGroup">
+
+                <TextView
+                    android:id="@+id/tvByCategoryLabel"
+                    style="@style/mediumTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/by_category"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <include
+                    android:id="@+id/categoryShimmer"
+                    layout="@layout/explore_item_shimmer_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvByCategoryLabel" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCategories"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvByCategoryLabel" />
+
+                <TextView
+                    android:id="@+id/tvByAreaLabel"
+                    style="@style/mediumTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/by_area"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/categoryShimmer" />
+
+                <include
+                    android:id="@+id/areaShimmer"
+                    layout="@layout/explore_item_shimmer_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvByAreaLabel" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAreas"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvByAreaLabel" />
+
+                <TextView
+                    android:id="@+id/tvByIngredientLabel"
+                    style="@style/mediumTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/by_ingredient"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/areaShimmer" />
+
+                <include
+                    android:id="@+id/ingredientShimmer"
+                    layout="@layout/explore_item_shimmer_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvByIngredientLabel" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvIngredients"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="horizontal"
+                    android:visibility="invisible"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvByIngredientLabel" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
