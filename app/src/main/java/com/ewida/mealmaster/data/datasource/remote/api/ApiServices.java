@@ -1,4 +1,4 @@
-package com.ewida.mealmaster.data.datasource.remote;
+package com.ewida.mealmaster.data.datasource.remote.api;
 
 import com.ewida.mealmaster.data.model.AreasResponse;
 import com.ewida.mealmaster.data.model.CategoriesResponse;
@@ -17,6 +17,12 @@ public interface ApiServices {
 
     @GET("filter.php")
     Single<CategoryMealsResponse> getCategoryMeals(@Query("c") String category);
+
+    @GET("filter.php")
+    Single<CategoryMealsResponse> getAreaMeals(@Query("a") String area);
+
+    @GET("filter.php")
+    Single<CategoryMealsResponse> getIngredientMeals(@Query("i") String ingredient);
 
     @GET("lookup.php")
     Single<MealResponse> getMealById(@Query("i") String id);

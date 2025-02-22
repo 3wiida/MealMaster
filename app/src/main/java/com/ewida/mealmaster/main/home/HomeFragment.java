@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment implements HomeViewContract, HomeMeal
 
     private void initClicks() {
         binding.randomMealCard.setOnClickListener(view -> {
-            Intent mealDetailsIntent = new Intent(getActivity(), MealDetailsActivity.class);
+            Intent mealDetailsIntent = new Intent(requireActivity(), MealDetailsActivity.class);
             mealDetailsIntent.putExtra(MealDetailsActivity.MEAL_OBJECT_EXTRA, randomMeal);
             startActivity(mealDetailsIntent);
         });

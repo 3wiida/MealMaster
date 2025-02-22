@@ -8,6 +8,7 @@ import com.ewida.mealmaster.data.model.Category;
 import com.ewida.mealmaster.data.model.ExploreItem;
 import com.ewida.mealmaster.data.model.IngredientApiModel;
 import com.ewida.mealmaster.data.repository.MealsRepository;
+import com.ewida.mealmaster.explore_meals.ExploreMealsContracts;
 import com.ewida.mealmaster.main.explore.ExploreContracts;
 
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class ExplorePresenter implements ExploreContracts.Presenter {
     }
 
     @Override
-    public void search(String query, ExploreContracts.SearchType type) {
+    public void search(String query, ExploreMealsContracts.ExploreType type) {
         List<ExploreItem> results;
         if(query.trim().isEmpty()){
             view.hideSearchResults();
@@ -90,7 +91,6 @@ public class ExplorePresenter implements ExploreContracts.Presenter {
                 default:
                     results = new ArrayList<>();
             }
-            Log.d("```TAG```", "search: "+results.size());
             view.showSearchResults(results);
         }
     }

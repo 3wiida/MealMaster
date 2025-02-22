@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".explore_meals.view.ExploreMeals">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuidLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/endGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/topGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="24dp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/icBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+            app:layout_constraintTop_toTopOf="@+id/topGuideLine">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_back" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvItemLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            style="@style/largeTitle"
+            android:textColor="@color/onBackgroundColor"
+            tools:text="Egyptian Meals"
+            app:layout_constraintBottom_toBottomOf="@+id/icBack"
+            app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+            app:layout_constraintTop_toTopOf="@+id/icBack" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMeals"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:nestedScrollingEnabled="false"
+            android:visibility="invisible"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+            app:layout_constraintTop_toBottomOf="@+id/icBack"
+            app:spanCount="2" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/progressBar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading_anim" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

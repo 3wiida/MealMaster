@@ -2,6 +2,7 @@ package com.ewida.mealmaster.data.datasource.remote;
 
 import android.util.Log;
 
+import com.ewida.mealmaster.data.datasource.remote.api.ApiServices;
 import com.ewida.mealmaster.data.model.AreasResponse;
 import com.ewida.mealmaster.data.model.CategoriesResponse;
 import com.ewida.mealmaster.data.model.CategoryMealsResponse;
@@ -56,6 +57,16 @@ public class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
     @Override
     public Single<CategoryMealsResponse> getCategoryMeals(String category) {
         return apiServices.getCategoryMeals(category);
+    }
+
+    @Override
+    public Single<CategoryMealsResponse> getAreaMeals(String area) {
+        return apiServices.getAreaMeals(area);
+    }
+
+    @Override
+    public Single<CategoryMealsResponse> getIngredientMeals(String ingredient) {
+        return apiServices.getIngredientMeals(ingredient);
     }
 
     @Override

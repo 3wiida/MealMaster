@@ -11,6 +11,8 @@ import retrofit2.http.Query;
 public interface MealsRepository {
     Single<MealResponse> getRandomMeal();
     Single<CategoryMealsResponse> getCategoryMeals( String category);
+    Single<CategoryMealsResponse> getAreaMeals(String area);
+    Single<CategoryMealsResponse> getIngredientMeals(String ingredient);
     Single<MealResponse> getMealById(String id);
     Single<MealResponse> search(String query);
     Single<CategoriesResponse> getAllCategories();

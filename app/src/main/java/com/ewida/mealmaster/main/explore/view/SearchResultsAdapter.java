@@ -19,6 +19,7 @@ import java.util.List;
 public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.ItemViewHolder> {
 
     private List<ExploreItem> items = new ArrayList<>();
+    private OnItemClickListener onItemClickListener;
 
     @NonNull
     @Override
@@ -42,6 +43,10 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         notifyDataSetChanged();
     }
 
+    public void setOnItemClick(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
+
     public final class ItemViewHolder extends RecyclerView.ViewHolder{
         private final ExploreSearchItemLayoutBinding binding;
 
@@ -51,11 +56,16 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         }
 
         public void bind(ExploreItem item){
-            binding.setItem(item);
             Glide.with(binding.ivItemThumb)
                     .load(item.getThumbnail())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.ivItemThumb);
+            binding.setItem(item);
+            binding.getRoot().setOnClickListener(view-> onItemClickListener.onItemClick(item));
         }
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(ExploreItem item);
     }
 }

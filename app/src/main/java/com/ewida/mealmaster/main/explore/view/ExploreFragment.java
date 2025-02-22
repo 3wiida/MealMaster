@@ -1,10 +1,13 @@
 package com.ewida.mealmaster.main.explore.view;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -14,17 +17,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.model.ExploreItem;
 import com.ewida.mealmaster.data.repository.MealsRepositoryImpl;
 import com.ewida.mealmaster.databinding.FragmentExploreBinding;
+import com.ewida.mealmaster.explore_meals.ExploreMealsContracts;
+import com.ewida.mealmaster.explore_meals.view.ExploreMeals;
 import com.ewida.mealmaster.main.explore.ExploreContracts;
 import com.ewida.mealmaster.main.explore.presenter.ExplorePresenter;
 import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
@@ -73,29 +81,37 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
 
     private void initClicks() {
         binding.searchChipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            ExploreContracts.SearchType searchType;
             String searchQuery = binding.etSearch.getEditableText().toString();
-            if (binding.searchChipGroup.getCheckedChipId() == R.id.chipCategory) {
-                searchType = ExploreContracts.SearchType.CATEGORY;
-            } else if (binding.searchChipGroup.getCheckedChipId() == R.id.chipArea) {
-                searchType = ExploreContracts.SearchType.AREA;
-            } else {
-                searchType = ExploreContracts.SearchType.INGREDIENT;
-            }
             if (!searchQuery.isEmpty())
-                presenter.search(searchQuery, searchType);
+                presenter.search(searchQuery, getExploreType());
         });
 
         categoriesAdapter.setOnItemClick(item -> {
-
+            Intent exploreMealsIntent = new Intent(requireActivity(), ExploreMeals.class);
+            exploreMealsIntent.putExtra(ExploreMeals.EXPLORE_TYPE_EXTRA, ExploreMealsContracts.ExploreType.CATEGORY);
+            exploreMealsIntent.putExtra(ExploreMeals.EXPLORE_QUERY_EXTRA, item.getTitle());
+            startActivity(exploreMealsIntent);
         });
 
         areasAdapter.setOnItemClick(item -> {
-
+            Intent exploreMealsIntent = new Intent(requireActivity(), ExploreMeals.class);
+            exploreMealsIntent.putExtra(ExploreMeals.EXPLORE_TYPE_EXTRA, ExploreMealsContracts.ExploreType.AREA);
+            exploreMealsIntent.putExtra(ExploreMeals.EXPLORE_QUERY_EXTRA, item.getTitle());
+            startActivity(exploreMealsIntent);
         });
 
         ingredientsAdapter.setOnItemClick(item -> {
+            Intent exploreMealsIntent = new Intent(requireActivity(), ExploreMeals.class);
+            exploreMealsIntent.putExtra(ExploreMeals.EXPLORE_TYPE_EXTRA, ExploreMealsContracts.ExploreType.INGREDIENT);
+            exploreMealsIntent.putExtra(ExploreMeals.EXPLORE_QUERY_EXTRA, item.getTitle());
+            startActivity(exploreMealsIntent);
+        });
 
+        searchResultsAdapter.setOnItemClick(item -> {
+            Intent exploreMealsIntent = new Intent(requireActivity(), ExploreMeals.class);
+            exploreMealsIntent.putExtra(ExploreMeals.EXPLORE_TYPE_EXTRA, getExploreType());
+            exploreMealsIntent.putExtra(ExploreMeals.EXPLORE_QUERY_EXTRA, item.getTitle());
+            startActivity(exploreMealsIntent);
         });
     }
 
@@ -119,35 +135,39 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
         });
 
         searchObservable.debounce(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(query -> {
-            ExploreContracts.SearchType searchType;
-            if (binding.searchChipGroup.getCheckedChipId() == R.id.chipCategory) {
-                searchType = ExploreContracts.SearchType.CATEGORY;
-            } else if (binding.searchChipGroup.getCheckedChipId() == R.id.chipArea) {
-                searchType = ExploreContracts.SearchType.AREA;
-            } else {
-                searchType = ExploreContracts.SearchType.INGREDIENT;
-            }
-            presenter.search(query, searchType);
+            presenter.search(query, getExploreType());
         });
+    }
+
+    private ExploreMealsContracts.ExploreType getExploreType() {
+        ExploreMealsContracts.ExploreType type;
+        if (binding.searchChipGroup.getCheckedChipId() == R.id.chipCategory) {
+            type = ExploreMealsContracts.ExploreType.CATEGORY;
+        } else if (binding.searchChipGroup.getCheckedChipId() == R.id.chipArea) {
+            type = ExploreMealsContracts.ExploreType.AREA;
+        } else {
+            type = ExploreMealsContracts.ExploreType.INGREDIENT;
+        }
+        return type;
     }
 
     @Override
     public void hideCategoriesLoadingState() {
-        if(isAdded() && getActivity() != null){
+        if (isAdded() && getActivity() != null) {
             binding.rvIngredients.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_out_anim));
         }
     }
 
     @Override
     public void hideAreasLoadingState() {
-        if(isAdded() && getActivity() != null) {
+        if (isAdded() && getActivity() != null) {
             binding.rvAreas.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_out_anim));
         }
     }
 
     @Override
     public void hideIngredientsLoadingState() {
-        if(isAdded() && getActivity() != null){
+        if (isAdded() && getActivity() != null) {
             binding.rvIngredients.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_out_anim));
         }
     }
@@ -158,7 +178,7 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             binding.rvCategories.setVisibility(View.VISIBLE);
             binding.categoryShimmer.setVisibility(View.INVISIBLE);
-            if(isAdded() && getActivity() != null){
+            if (isAdded() && getActivity() != null) {
                 binding.rvCategories.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_in_anim));
             }
         }, 300L);
@@ -170,7 +190,7 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             binding.rvAreas.setVisibility(View.VISIBLE);
             binding.areaShimmer.setVisibility(View.INVISIBLE);
-            if(isAdded() && getActivity() != null){
+            if (isAdded() && getActivity() != null) {
                 binding.rvAreas.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_in_anim));
             }
         }, 300L);
@@ -182,7 +202,7 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             binding.rvIngredients.setVisibility(View.VISIBLE);
             binding.ingredientShimmer.setVisibility(View.INVISIBLE);
-            if(isAdded() && getActivity() != null){
+            if (isAdded() && getActivity() != null) {
                 binding.rvIngredients.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_in_anim));
             }
         }, 300L);
@@ -215,4 +235,10 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
         Snackbar.make(binding.getRoot(), errorMsg, Snackbar.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onDestroyView() {
+        binding.etSearch.setText("");
+        binding.searchChipGroup.check(binding.searchChipGroup.getChildAt(0).getId());
+        super.onDestroyView();
+    }
 }
