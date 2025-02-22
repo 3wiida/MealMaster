@@ -9,16 +9,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.ewida.mealmaster.data.model.ExploreItem;
 import com.ewida.mealmaster.databinding.ExploreItemLayoutBinding;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExploreItemAdapter extends RecyclerView.Adapter<ExploreItemAdapter.ItemViewHolder> {
 
-    private final List<ExploreItem> items;
+    private List<ExploreItem> items = new ArrayList<>();
     private OnExploreItemClickListener onExploreItemClickListener;
-
-    public ExploreItemAdapter(List<ExploreItem> items) {
-        this.items = items;
-    }
 
     @NonNull
     @Override
@@ -35,6 +33,11 @@ public class ExploreItemAdapter extends RecyclerView.Adapter<ExploreItemAdapter.
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public void setList(List<ExploreItem> items){
+        this.items = items;
+        notifyDataSetChanged();
     }
 
     public void setOnItemClick(OnExploreItemClickListener onExploreItemClickListener){

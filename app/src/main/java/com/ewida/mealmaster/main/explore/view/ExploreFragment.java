@@ -39,7 +39,6 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentExploreBinding.inflate(inflater, container, false);
-        searchResultsAdapter = new SearchResultsAdapter();
         return binding.getRoot();
     }
 
@@ -57,6 +56,14 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
 
     private void initViews() {
         binding.searchChipGroup.check(binding.searchChipGroup.getChildAt(0).getId());
+        searchResultsAdapter = new SearchResultsAdapter();
+        binding.rvSearchResults.setAdapter(searchResultsAdapter);
+        categoriesAdapter = new ExploreItemAdapter();
+        binding.rvCategories.setAdapter(categoriesAdapter);
+        areasAdapter = new ExploreItemAdapter();
+        binding.rvAreas.setAdapter(areasAdapter);
+        ingredientsAdapter = new ExploreItemAdapter();
+        binding.rvIngredients.setAdapter(ingredientsAdapter);
     }
 
     private void initClicks() {
@@ -121,52 +128,58 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
 
     @Override
     public void hideCategoriesLoadingState() {
-        binding.rvIngredients.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_anim));
-
+        if(isAdded() && getActivity() != null){
+            binding.rvIngredients.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_out_anim));
+        }
     }
 
     @Override
     public void hideAreasLoadingState() {
-        binding.rvAreas.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_anim));
-
+        if(isAdded() && getActivity() != null) {
+            binding.rvAreas.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_out_anim));
+        }
     }
 
     @Override
     public void hideIngredientsLoadingState() {
-        binding.rvIngredients.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_anim));
-
+        if(isAdded() && getActivity() != null){
+            binding.rvIngredients.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_out_anim));
+        }
     }
 
     @Override
     public void showAllCategories(List<ExploreItem> categories) {
-        categoriesAdapter = new ExploreItemAdapter(categories);
-        binding.rvCategories.setAdapter(categoriesAdapter);
+        categoriesAdapter.setList(categories);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             binding.rvCategories.setVisibility(View.VISIBLE);
             binding.categoryShimmer.setVisibility(View.INVISIBLE);
-            binding.rvCategories.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_anim));
+            if(isAdded() && getActivity() != null){
+                binding.rvCategories.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_in_anim));
+            }
         }, 300L);
     }
 
     @Override
     public void showAllAreas(List<ExploreItem> areas) {
-        areasAdapter = new ExploreItemAdapter(areas);
-        binding.rvAreas.setAdapter(areasAdapter);
+        areasAdapter.setList(areas);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             binding.rvAreas.setVisibility(View.VISIBLE);
             binding.areaShimmer.setVisibility(View.INVISIBLE);
-            binding.rvAreas.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_anim));
+            if(isAdded() && getActivity() != null){
+                binding.rvAreas.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_in_anim));
+            }
         }, 300L);
     }
 
     @Override
     public void showAllIngredients(List<ExploreItem> ingredients) {
-        ingredientsAdapter = new ExploreItemAdapter(ingredients);
-        binding.rvIngredients.setAdapter(ingredientsAdapter);
+        ingredientsAdapter.setList(ingredients);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             binding.rvIngredients.setVisibility(View.VISIBLE);
             binding.ingredientShimmer.setVisibility(View.INVISIBLE);
-            binding.rvIngredients.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_anim));
+            if(isAdded() && getActivity() != null){
+                binding.rvIngredients.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_in_anim));
+            }
         }, 300L);
     }
 
@@ -174,13 +187,17 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
     public void showSectionGroup() {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             binding.sectionsGroup.setVisibility(View.VISIBLE);
-            binding.sectionsGroup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_anim));
+            if(isAdded() && getActivity() != null){
+                binding.sectionsGroup.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_in_anim));
+            }
         }, 300L);
     }
 
     @Override
     public void hideSectionGroup() {
-        binding.sectionsGroup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_anim));
+        if(isAdded() && getActivity() != null){
+            binding.sectionsGroup.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_out_anim));
+        }
     }
 
     @Override
@@ -192,7 +209,9 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
 
     @Override
     public void hideSearchResults() {
-        binding.rvSearchResults.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_anim));
+        if(isAdded() && getActivity() != null){
+            binding.rvSearchResults.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_out_anim));
+        }
         searchResultsAdapter.setList(new ArrayList<>());
     }
 
