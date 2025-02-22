@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,12 +57,16 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
 
     private void initViews() {
         binding.searchChipGroup.check(binding.searchChipGroup.getChildAt(0).getId());
+
         searchResultsAdapter = new SearchResultsAdapter();
         binding.rvSearchResults.setAdapter(searchResultsAdapter);
+
         categoriesAdapter = new ExploreItemAdapter();
         binding.rvCategories.setAdapter(categoriesAdapter);
+
         areasAdapter = new ExploreItemAdapter();
         binding.rvAreas.setAdapter(areasAdapter);
+
         ingredientsAdapter = new ExploreItemAdapter();
         binding.rvIngredients.setAdapter(ingredientsAdapter);
     }
@@ -185,19 +190,12 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
 
     @Override
     public void showSectionGroup() {
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            binding.sectionsGroup.setVisibility(View.VISIBLE);
-            if(isAdded() && getActivity() != null){
-                binding.sectionsGroup.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_in_anim));
-            }
-        }, 300L);
+        binding.sectionsGroup.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideSectionGroup() {
-        if(isAdded() && getActivity() != null){
-            binding.sectionsGroup.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_out_anim));
-        }
+        binding.sectionsGroup.setVisibility(View.GONE);
     }
 
     @Override
@@ -209,9 +207,6 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
 
     @Override
     public void hideSearchResults() {
-        if(isAdded() && getActivity() != null){
-            binding.rvSearchResults.startAnimation(AnimationUtils.loadAnimation(requireActivity(), R.anim.fade_out_anim));
-        }
         searchResultsAdapter.setList(new ArrayList<>());
     }
 
