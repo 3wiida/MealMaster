@@ -1,17 +1,13 @@
-package com.ewida.mealmaster.auth.login;
+package com.ewida.mealmaster.auth.login.presenter;
 
 
 import android.content.Context;
 import android.content.Intent;
-
 import androidx.databinding.ObservableArrayList;
-
 import com.ewida.mealmaster.R;
-import com.ewida.mealmaster.model.data_sources.firebase.auth.FirebaseAuthContract;
-import com.ewida.mealmaster.model.data_sources.firebase.auth.FirebaseAuthentication;
-import com.ewida.mealmaster.model.data_sources.firebase.database.FirebaseDB;
-import com.ewida.mealmaster.model.data_sources.firebase.database.FirebaseDatabaseContract;
+import com.ewida.mealmaster.auth.login.LoginContracts;
 import com.ewida.mealmaster.data.model.User;
+import com.ewida.mealmaster.data.repository.user_repo.UserRepository;
 import com.ewida.mealmaster.utils.Constants;
 import com.ewida.mealmaster.utils.enums.FormErrors;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -19,19 +15,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class LoginPresenter implements LoginPresenterContract {
-    private final LoginViewContract loginView;
-    private final FirebaseAuthContract firebaseAuth;
-    private final FirebaseDatabaseContract firebaseDB;
+public class LoginPresenter implements LoginContracts.Presenter {
+    private final LoginContracts.View loginView;
+    private final UserRepository repo;
     private final ObservableArrayList<FormErrors> loginFormErrors;
 
-    public LoginPresenter(LoginViewContract loginView) {
+    public LoginPresenter(LoginContracts.View loginView, UserRepository repo) {
         this.loginView = loginView;
-        this.firebaseAuth = new FirebaseAuthentication();
-        this.firebaseDB = new FirebaseDB();
+        this.repo = repo;
         this.loginFormErrors = new ObservableArrayList<>();
     }
 
@@ -40,10 +32,10 @@ public class LoginPresenter implements LoginPresenterContract {
     }
 
     @Override
-    public void handleLoginClick(Context context, String email, String password) {
+    public void handleLoginClick(String email, String password) {
         if (isCredentialValid(email, password)) {
             loginView.showLoaderOnLoginButton();
-            loginWithEmailAndPassword(context, email, password);
+            loginWithEmailAndPassword(email, password);
         }
     }
 
@@ -58,30 +50,26 @@ public class LoginPresenter implements LoginPresenterContract {
         return loginFormErrors.isEmpty();
     }
 
-    private void loginWithEmailAndPassword(Context context, String email, String password) {
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
-            getUsernameFromDatabase(context, authResult.getUser().getUid());
+    private void loginWithEmailAndPassword(String email, String password) {
+        repo.login(email, password).addOnSuccessListener(authResult -> {
+            getUsernameFromDatabase(authResult.getUser().getUid());
         }).addOnFailureListener(error -> {
             loginView.showErrorMessage(error.getMessage());
         });
     }
 
-    private void getUsernameFromDatabase(Context context, String id) {
-        firebaseDB.getUserByID(id).get().addOnSuccessListener(dataSnapshot -> {
+    private void getUsernameFromDatabase(String id) {
+        repo.getUserByID(id).get().addOnSuccessListener(dataSnapshot -> {
             String username = dataSnapshot.getValue(User.class).getName();
-            saveUserNameInSharedPref(context, username);
+            repo.setCurrentUserName(username);
+            repo.setCurrentUserId(id);
             loginView.navigateToHomeScreen();
         }).addOnFailureListener(error -> {
             loginView.showErrorMessage(error.getMessage());
         });
     }
 
-    private void saveUserNameInSharedPref(Context context, String username) {
-        context.getSharedPreferences(Constants.SharedPref.PREFS_FILE_NAME, Context.MODE_PRIVATE)
-                .edit()
-                .putString(Constants.SharedPref.USER_NAME_KEY, username)
-                .apply();
-    }
+
 
     @Override
     public Intent getGoogleSignInIntent(Context context) {
@@ -93,11 +81,12 @@ public class LoginPresenter implements LoginPresenterContract {
     }
 
     @Override
-    public void handleGoogleAuthResult(Context context, Task<GoogleSignInAccount> completedTask) {
+    public void handleGoogleAuthResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            firebaseAuth.authWithGoogle(account).addOnSuccessListener(authResult -> {
-                saveUserNameInSharedPref(context,authResult.getUser().getDisplayName());
+            repo.authWithGoogle(account).addOnSuccessListener(authResult -> {
+                repo.setCurrentUserName(authResult.getUser().getDisplayName());
+                repo.setCurrentUserId(authResult.getUser().getUid());
                 loginView.navigateToHomeScreen();
             }).addOnFailureListener(error -> {
                 loginView.showErrorMessage(error.getMessage());

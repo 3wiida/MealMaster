@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.ewida.mealmaster.auth.login.LoginFragment"
+        android:name="com.ewida.mealmaster.auth.login.view.LoginFragment"
         android:label="LoginFragment" >
         <action
             android:id="@+id/actionToRegisterFragment"
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.ewida.mealmaster.auth.register.RegisterFragment"
+        android:name="com.ewida.mealmaster.auth.register.view.RegisterFragment"
         android:label="RegisterFragment" >
         <action
             android:id="@+id/actionToLoginFragment"

@@ -5,6 +5,7 @@ import static android.view.View.VISIBLE;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -17,9 +18,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.ewida.mealmaster.R;
+import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.model.Meal;
-import com.ewida.mealmaster.data.repository.MealsRepositoryImpl;
+import com.ewida.mealmaster.data.repository.meals_repo.MealsRepositoryImpl;
 import com.ewida.mealmaster.databinding.ActivitySearchBinding;
 import com.ewida.mealmaster.meal_details.view.MealDetailsActivity;
 import com.ewida.mealmaster.search.SearchContracts;
@@ -50,7 +52,13 @@ public class SearchActivity extends AppCompatActivity implements SearchContracts
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        presenter = new SearchPresenter(this, MealsRepositoryImpl.getInstance(MealsRemoteDataSourceImpl.getInstance()));
+        presenter = new SearchPresenter(
+                this,
+                MealsRepositoryImpl.getInstance(
+                        MealsRemoteDataSourceImpl.getInstance(),
+                        MealsLocalDataSourceImpl.getInstance(this)
+                )
+        );
         initViews();
         initQueryObservable();
     }
@@ -137,7 +145,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContracts
     @Override
     public void onMealClicked(Meal meal) {
         Intent mealDetailsIntent = new Intent(this, MealDetailsActivity.class);
-        mealDetailsIntent.putExtra(MealDetailsActivity.MEAL_OBJECT_EXTRA, meal);
+        mealDetailsIntent.putExtra(MealDetailsActivity.MEAL_OBJECT_EXTRA, (Parcelable) meal);
         startActivity(mealDetailsIntent);
     }
 }

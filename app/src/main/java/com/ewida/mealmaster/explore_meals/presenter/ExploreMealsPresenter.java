@@ -3,11 +3,10 @@ package com.ewida.mealmaster.explore_meals.presenter;
 import android.annotation.SuppressLint;
 
 import com.ewida.mealmaster.data.model.CategoryMealsResponse;
-import com.ewida.mealmaster.data.repository.MealsRepository;
+import com.ewida.mealmaster.data.repository.meals_repo.MealsRepository;
 import com.ewida.mealmaster.explore_meals.ExploreMealsContracts;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 

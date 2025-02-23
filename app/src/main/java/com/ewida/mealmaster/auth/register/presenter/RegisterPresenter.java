@@ -1,14 +1,14 @@
-package com.ewida.mealmaster.auth.register;
+package com.ewida.mealmaster.auth.register.presenter;
 
 import android.content.Context;
 import android.content.Intent;
 import androidx.databinding.ObservableArrayList;
 import com.ewida.mealmaster.R;
-import com.ewida.mealmaster.model.data_sources.firebase.auth.FirebaseAuthContract;
-import com.ewida.mealmaster.model.data_sources.firebase.auth.FirebaseAuthentication;
-import com.ewida.mealmaster.model.data_sources.firebase.database.FirebaseDB;
-import com.ewida.mealmaster.model.data_sources.firebase.database.FirebaseDatabaseContract;
+import com.ewida.mealmaster.auth.register.RegisterContracts;
+import com.ewida.mealmaster.data.datasource.remote.firebase.auth.FirebaseAuthContract;
+import com.ewida.mealmaster.data.datasource.remote.firebase.database.FirebaseDatabaseContract;
 import com.ewida.mealmaster.data.model.User;
+import com.ewida.mealmaster.data.repository.user_repo.UserRepository;
 import com.ewida.mealmaster.utils.Constants;
 import com.ewida.mealmaster.utils.enums.FormErrors;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -17,17 +17,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-public class RegisterPresenter implements RegisterPresenterContract {
+public class RegisterPresenter implements RegisterContracts.Presenter {
 
-    private final RegisterViewContract registerView;
-    private final FirebaseAuthContract firebaseAuth;
-    private final FirebaseDatabaseContract firebaseDB;
+    private final RegisterContracts.View registerView;
+    private final UserRepository repo;
     private final ObservableArrayList<FormErrors> registerFormErrors;
 
-    public RegisterPresenter(RegisterViewContract registerView) {
+    public RegisterPresenter(RegisterContracts.View registerView, UserRepository repo) {
         this.registerView = registerView;
-        this.firebaseAuth = new FirebaseAuthentication();
-        this.firebaseDB = new FirebaseDB();
+        this.repo = repo;
         this.registerFormErrors = new ObservableArrayList<>();
     }
 
@@ -36,10 +34,10 @@ public class RegisterPresenter implements RegisterPresenterContract {
     }
 
     @Override
-    public void handleCreateAccountClick(Context context, String fullName, String email, String password) {
+    public void handleCreateAccountClick(String fullName, String email, String password) {
         if (isCredentialValid(fullName, email, password)) {
             registerView.showLoaderOnCreateAccountButton();
-            registerWithEmailAndPassword(context, fullName, email, password);
+            registerWithEmailAndPassword(fullName, email, password);
         }
     }
 
@@ -57,27 +55,21 @@ public class RegisterPresenter implements RegisterPresenterContract {
         return registerFormErrors.isEmpty();
     }
 
-    private void registerWithEmailAndPassword(Context context, String fullName, String email, String password) {
-        firebaseAuth.signUpWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
+    private void registerWithEmailAndPassword(String fullName, String email, String password) {
+        repo.register(email, password).addOnSuccessListener(authResult -> {
             User user = new User(authResult.getUser().getUid(), fullName);
-            insertUserInDatabase(context, user);
+            insertUserInDatabase(user);
         }).addOnFailureListener(error -> registerView.showErrorMessage(error.getMessage()));
     }
 
-    private void insertUserInDatabase(Context context, User user) {
-        firebaseDB.insertUser(user).addOnSuccessListener(unused -> {
-            saveUserNameInSharedPref(context, user.getName());
+    private void insertUserInDatabase(User user) {
+        repo.saveUserData(user).addOnSuccessListener(unused -> {
+            repo.setCurrentUserName(user.getName());
+            repo.setCurrentUserId(user.getId());
             registerView.navigateToHomeScreen();
         }).addOnFailureListener(error -> {
             registerView.showErrorMessage(error.getMessage());
         });
-    }
-
-    private void saveUserNameInSharedPref(Context context, String username) {
-        context.getSharedPreferences(Constants.SharedPref.PREFS_FILE_NAME, Context.MODE_PRIVATE)
-                .edit()
-                .putString(Constants.SharedPref.USER_NAME_KEY, username)
-                .apply();
     }
 
     @Override
@@ -90,11 +82,12 @@ public class RegisterPresenter implements RegisterPresenterContract {
     }
 
     @Override
-    public void handleGoogleAuthResult(Context context, Task<GoogleSignInAccount> completedTask) {
+    public void handleGoogleAuthResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            firebaseAuth.authWithGoogle(account).addOnSuccessListener(authResult -> {
-                saveUserNameInSharedPref(context,authResult.getUser().getDisplayName());
+            repo.authWithGoogle(account).addOnSuccessListener(authResult -> {
+                repo.setCurrentUserName(authResult.getUser().getDisplayName());
+                repo.setCurrentUserId(authResult.getUser().getUid());
                 registerView.navigateToHomeScreen();
             }).addOnFailureListener(error -> registerView.showErrorMessage(error.getMessage()));
         } catch (ApiException exception) {

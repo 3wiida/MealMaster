@@ -59,4 +59,5 @@
     <string name="ingredient">Ingredient</string>
     <string name="area">Area</string>
     <string name="category">Category</string>
+    <string name="saved_meals">Saved Meals</string>
 </resources>

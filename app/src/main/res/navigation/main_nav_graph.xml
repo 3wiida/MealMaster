@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_plans" />
     <fragment
         android:id="@+id/savedFragment"
-        android:name="com.ewida.mealmaster.main.saved.SavedFragment"
+        android:name="com.ewida.mealmaster.main.saved.view.SavedFragment"
         android:label="fragment_saved"
         tools:layout="@layout/fragment_saved" />
     <fragment

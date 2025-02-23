@@ -1,4 +1,4 @@
-package com.ewida.mealmaster.auth.register;
+package com.ewida.mealmaster.auth.register.view;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -17,28 +17,42 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ewida.mealmaster.R;
+import com.ewida.mealmaster.auth.register.RegisterContracts;
+import com.ewida.mealmaster.auth.register.presenter.RegisterPresenter;
+import com.ewida.mealmaster.data.datasource.local.UserLocalDataSourceImpl;
+import com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSourceImpl;
+import com.ewida.mealmaster.data.repository.user_repo.UserRepositoryImpl;
 import com.ewida.mealmaster.databinding.FragmentRegisterBinding;
 import com.ewida.mealmaster.main.MainActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class RegisterFragment extends Fragment implements RegisterViewContract {
+public class RegisterFragment extends Fragment implements RegisterContracts.View {
 
     private FragmentRegisterBinding binding;
-    private RegisterPresenterContract presenter;
+    private RegisterContracts.Presenter presenter;
     private ActivityResultLauncher<Intent> googleAuthLauncher;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new RegisterPresenter(this);
+        presenter = new RegisterPresenter(
+                this,
+                UserRepositoryImpl.getInstance(
+                        UserRemoteDataSourceImpl.getInstance(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance()),
+                        UserLocalDataSourceImpl.getInstance(requireContext())
+                )
+        );
+
         googleAuthLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
                 Intent data = result.getData();
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                presenter.handleGoogleAuthResult(getContext(), task);
+                presenter.handleGoogleAuthResult(task);
             } else {
                 binding.btnGoogleRegister.setLoading(false);
                 binding.btnCreateAccount.setLoading(false);
@@ -74,7 +88,7 @@ public class RegisterFragment extends Fragment implements RegisterViewContract {
         String fullName = binding.etFullName.getText().toString().trim();
         String email = binding.etEmail.getText().toString().trim();
         String password = binding.etPassword.getText().toString().trim();
-        presenter.handleCreateAccountClick(getContext(), fullName, email, password);
+        presenter.handleCreateAccountClick(fullName, email, password);
     }
 
     private void startGoogleAuth() {

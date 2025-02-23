@@ -12,16 +12,16 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 
 import com.ewida.mealmaster.R;
+import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.model.ExploreItem;
-import com.ewida.mealmaster.data.repository.MealsRepositoryImpl;
+import com.ewida.mealmaster.data.repository.meals_repo.MealsRepositoryImpl;
 import com.ewida.mealmaster.databinding.FragmentExploreBinding;
 import com.ewida.mealmaster.explore_meals.ExploreMealsContracts;
 import com.ewida.mealmaster.explore_meals.view.ExploreMeals;
@@ -54,7 +54,13 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = new ExplorePresenter(this, MealsRepositoryImpl.getInstance(MealsRemoteDataSourceImpl.getInstance()));
+        presenter = new ExplorePresenter(
+                this,
+                MealsRepositoryImpl.getInstance(
+                        MealsRemoteDataSourceImpl.getInstance(),
+                        MealsLocalDataSourceImpl.getInstance(requireContext())
+                )
+        );
         presenter.getAllCategories();
         presenter.getAllAreas();
         presenter.getAllIngredients();

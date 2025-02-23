@@ -43,7 +43,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/icSave"
+                    android:id="@+id/saveCard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="42dp"
@@ -54,6 +54,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
+                        android:id="@+id/icSave"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:padding="10dp"

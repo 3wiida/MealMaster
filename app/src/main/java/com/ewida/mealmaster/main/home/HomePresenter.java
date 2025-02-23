@@ -1,11 +1,9 @@
 package com.ewida.mealmaster.main.home;
 
 import com.ewida.mealmaster.data.model.CategoryMealsResponse;
-import com.ewida.mealmaster.data.model.Meal;
 import com.ewida.mealmaster.data.model.MealResponse;
-import com.ewida.mealmaster.data.repository.MealsRepository;
-import java.util.Arrays;
-import java.util.List;
+import com.ewida.mealmaster.data.repository.meals_repo.MealsRepository;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.SingleObserver;

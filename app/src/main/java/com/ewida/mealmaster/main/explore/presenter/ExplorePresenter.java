@@ -1,13 +1,12 @@
 package com.ewida.mealmaster.main.explore.presenter;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import com.ewida.mealmaster.data.model.Area;
 import com.ewida.mealmaster.data.model.Category;
 import com.ewida.mealmaster.data.model.ExploreItem;
 import com.ewida.mealmaster.data.model.IngredientApiModel;
-import com.ewida.mealmaster.data.repository.MealsRepository;
+import com.ewida.mealmaster.data.repository.meals_repo.MealsRepository;
 import com.ewida.mealmaster.explore_meals.ExploreMealsContracts;
 import com.ewida.mealmaster.main.explore.ExploreContracts;
 

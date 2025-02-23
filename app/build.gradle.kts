@@ -73,10 +73,15 @@ dependencies {
     //RXJava
     implementation (libs.rxandroid)
     implementation (libs.rxjava)
+    implementation (libs.room.rxjava3)
 
     //Glide
     implementation (libs.glide)
 
     //Youtube Player View
     implementation (libs.core)
+
+    //Room
+    implementation (libs.room.runtime)
+    annotationProcessor (libs.room.compiler)
 }

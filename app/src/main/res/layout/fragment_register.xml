@@ -8,7 +8,7 @@
         <import type="com.ewida.mealmaster.utils.enums.FormErrors"/>
         <variable
             name="presenter"
-            type="com.ewida.mealmaster.auth.register.RegisterPresenter" />
+            type="com.ewida.mealmaster.auth.register.presenter.RegisterPresenter" />
     </data>
 
     <ScrollView
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/backgroundColor"
-            tools:context=".auth.register.RegisterFragment">
+            tools:context=".auth.register.view.RegisterFragment">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/glStart"

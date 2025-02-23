@@ -13,14 +13,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.ewida.mealmaster.R;
+import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSourceImpl;
+import com.ewida.mealmaster.data.datasource.local.UserLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
+import com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.model.Ingredient;
 import com.ewida.mealmaster.data.model.Meal;
-import com.ewida.mealmaster.data.repository.MealsRepositoryImpl;
+
+import com.ewida.mealmaster.data.repository.meals_repo.MealsRepositoryImpl;
+import com.ewida.mealmaster.data.repository.user_repo.UserRepositoryImpl;
 import com.ewida.mealmaster.databinding.ActivityMealDetailsBinding;
 import com.ewida.mealmaster.meal_details.MealDetailsContracts;
 import com.ewida.mealmaster.meal_details.presenter.MealDetailsPresenter;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 
@@ -28,30 +35,54 @@ import java.util.List;
 
 public class MealDetailsActivity extends AppCompatActivity implements MealDetailsContracts.View {
 
-    private ActivityMealDetailsBinding binding;
-    private MealDetailsContracts.Presenter presenter;
     public static final String MEAL_ID_EXTRA = "MEAL_ID_EXTRA";
     public static final String MEAL_OBJECT_EXTRA = "MEAL_OBJECT_EXTRA";
+    private ActivityMealDetailsBinding binding;
+    private MealDetailsContracts.Presenter presenter;
+    private Meal meal;
+    private boolean isSaved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMealDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        presenter = new MealDetailsPresenter(this, MealsRepositoryImpl.getInstance(MealsRemoteDataSourceImpl.getInstance()));
+
+        presenter = new MealDetailsPresenter(
+                this,
+                MealsRepositoryImpl.getInstance(
+                        MealsRemoteDataSourceImpl.getInstance(),
+                        MealsLocalDataSourceImpl.getInstance(this)
+                ),
+                UserRepositoryImpl.getInstance(
+                        UserRemoteDataSourceImpl.getInstance(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance()),
+                        UserLocalDataSourceImpl.getInstance(this)
+                )
+        );
+
         initClicks();
         getMeal(getIntent().getStringExtra(MEAL_ID_EXTRA));
     }
 
     private void initClicks() {
         binding.icBack.setOnClickListener(view -> finish());
+        binding.icSave.setOnClickListener(view -> {
+            if(isSaved){
+                presenter.unSaveMeal(meal);
+            }else{
+                presenter.saveMeal(meal);
+            }
+            setSavedIcon(!isSaved);
+        });
     }
 
     private void getMeal(String id) {
         if (id == null) {
             Meal meal = getIntent().getParcelableExtra(MEAL_OBJECT_EXTRA);
-            if (meal != null)
+            if (meal != null) {
+                this.meal = meal;
                 showMealDetails(meal);
+            }
         } else {
             presenter.getMealById(id);
         }
@@ -59,6 +90,8 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
     @Override
     public void showMealDetails(Meal meal) {
+        this.meal = meal;
+        presenter.isMealSaved(meal.getIdMeal());
         Glide.with(binding.ivMealThumbnail)
                 .load(meal.getStrMealThumb())
                 .placeholder(R.drawable.image_placeholder)
@@ -77,6 +110,12 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
             binding.dataConstraint.setVisibility(VISIBLE);
             binding.dataConstraint.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in_anim));
         }, 300L);
+    }
+
+    @Override
+    public void setSavedIcon(boolean isSaved) {
+        this.isSaved = isSaved;
+        binding.icSave.setImageResource(isSaved ? R.drawable.ic_saved : R.drawable.ic_un_saved);
     }
 
     private void initIngredientsRv(List<Ingredient> ingredientList) {
@@ -98,7 +137,8 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     }
 
     @Override
-    public void showErrorMessage(String errorMsg) {
-        Snackbar.make(binding.getRoot(), errorMsg, Snackbar.LENGTH_SHORT).show();
+    public void showMessage(String msg) {
+        Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT).show();
     }
+
 }

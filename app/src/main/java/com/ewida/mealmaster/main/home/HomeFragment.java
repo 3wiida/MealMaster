@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,9 @@ import android.view.animation.AnimationUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.ewida.mealmaster.R;
+import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
-import com.ewida.mealmaster.data.repository.MealsRepositoryImpl;
+import com.ewida.mealmaster.data.repository.meals_repo.MealsRepositoryImpl;
 import com.ewida.mealmaster.databinding.FragmentHomeBinding;
 import com.ewida.mealmaster.data.model.CategoryMeal;
 import com.ewida.mealmaster.data.model.Meal;
@@ -40,7 +42,13 @@ public class HomeFragment extends Fragment implements HomeViewContract, HomeMeal
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        presenter = new HomePresenter(this, MealsRepositoryImpl.getInstance(MealsRemoteDataSourceImpl.getInstance()));
+        presenter = new HomePresenter(
+                this,
+                MealsRepositoryImpl.getInstance(
+                        MealsRemoteDataSourceImpl.getInstance(),
+                        MealsLocalDataSourceImpl.getInstance(requireContext())
+                )
+        );
         return binding.getRoot();
     }
 
@@ -58,7 +66,7 @@ public class HomeFragment extends Fragment implements HomeViewContract, HomeMeal
     private void initClicks() {
         binding.randomMealCard.setOnClickListener(view -> {
             Intent mealDetailsIntent = new Intent(requireActivity(), MealDetailsActivity.class);
-            mealDetailsIntent.putExtra(MealDetailsActivity.MEAL_OBJECT_EXTRA, randomMeal);
+            mealDetailsIntent.putExtra(MealDetailsActivity.MEAL_OBJECT_EXTRA, (Parcelable) randomMeal);
             startActivity(mealDetailsIntent);
         });
 

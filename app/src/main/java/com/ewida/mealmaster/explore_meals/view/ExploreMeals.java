@@ -15,9 +15,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.ewida.mealmaster.R;
+import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.model.CategoryMeal;
-import com.ewida.mealmaster.data.repository.MealsRepositoryImpl;
+import com.ewida.mealmaster.data.repository.meals_repo.MealsRepositoryImpl;
 import com.ewida.mealmaster.databinding.ActivityExploreItemMealsBinding;
 import com.ewida.mealmaster.explore_meals.ExploreMealsContracts;
 import com.ewida.mealmaster.explore_meals.presenter.ExploreMealsPresenter;
@@ -44,7 +45,13 @@ public class ExploreMeals extends AppCompatActivity implements ExploreMealsContr
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        presenter = new ExploreMealsPresenter(this, MealsRepositoryImpl.getInstance(MealsRemoteDataSourceImpl.getInstance()));
+        presenter = new ExploreMealsPresenter(
+                this,
+                MealsRepositoryImpl.getInstance(
+                        MealsRemoteDataSourceImpl.getInstance(),
+                        MealsLocalDataSourceImpl.getInstance(this)
+                )
+        );
         initViews();
         initClicks();
         getMeals();

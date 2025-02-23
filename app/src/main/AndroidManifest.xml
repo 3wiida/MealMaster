@@ -10,30 +10,38 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:name=".MealMasterApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MealMaster"
         tools:targetApi="31">
         <activity
             android:name=".explore_meals.view.ExploreMeals"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".search.view.SearchActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".meal_details.view.MealDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".main.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".auth.AuthActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".onboarding.OnboardingActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".splash.SplashScreen"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

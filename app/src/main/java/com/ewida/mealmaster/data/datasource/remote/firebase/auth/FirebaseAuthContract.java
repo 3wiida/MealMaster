@@ -1,4 +1,4 @@
-package com.ewida.mealmaster.model.data_sources.firebase.auth;
+package com.ewida.mealmaster.data.datasource.remote.firebase.auth;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;

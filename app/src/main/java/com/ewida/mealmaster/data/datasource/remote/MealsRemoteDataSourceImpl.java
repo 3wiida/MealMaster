@@ -1,5 +1,7 @@
 package com.ewida.mealmaster.data.datasource.remote;
 
+import static com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSourceImpl.USER_DB_PATH;
+
 import android.util.Log;
 
 import com.ewida.mealmaster.data.datasource.remote.api.ApiServices;
@@ -8,6 +10,9 @@ import com.ewida.mealmaster.data.model.CategoriesResponse;
 import com.ewida.mealmaster.data.model.CategoryMealsResponse;
 import com.ewida.mealmaster.data.model.IngredientsResponse;
 import com.ewida.mealmaster.data.model.MealResponse;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import io.reactivex.rxjava3.core.Single;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -20,6 +25,7 @@ public class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
     private final String BASE_URL = "https://www.themealdb.com/api/json/v1/1/";
     private final String TAG = "ApiClient";
     private final ApiServices apiServices;
+    private final FirebaseDatabase db;
     private static MealsRemoteDataSource instance;
 
     private MealsRemoteDataSourceImpl(){
@@ -31,6 +37,7 @@ public class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build()
                 .create(ApiServices.class);
+        this.db = FirebaseDatabase.getInstance();
     }
 
     public static MealsRemoteDataSource getInstance(){
@@ -92,5 +99,10 @@ public class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
     @Override
     public Single<IngredientsResponse> getAllIngredients() {
         return apiServices.getAllIngredients("list");
+    }
+
+    @Override
+    public DatabaseReference getSavedMeals(String userId) {
+        return db.getReference().child(USER_DB_PATH).child(userId).child("Saved");
     }
 }
