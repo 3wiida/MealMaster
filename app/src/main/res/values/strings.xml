@@ -60,4 +60,8 @@
     <string name="area">Area</string>
     <string name="category">Category</string>
     <string name="saved_meals">Saved Meals</string>
+    <string name="no_saved_meals_yet">No Saved Meals Yet!</string>
+    <string name="saved_meals_empty_state_des">Browse delicious recipes and save your favorites to find them easily later!</string>
+    <string name="oops_feature_unavailable">Oops! Feature Unavailable</string>
+    <string name="login_required_des">Saving meals is only available for registered users. Sign up or log in to enjoy this feature!</string>
 </resources>

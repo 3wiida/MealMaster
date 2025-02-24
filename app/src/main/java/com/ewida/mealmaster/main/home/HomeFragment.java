@@ -78,7 +78,12 @@ public class HomeFragment extends Fragment implements HomeViewContract, HomeMeal
     @Override
     public void showRandomMeal(Meal meal) {
         this.randomMeal = meal;
-        Glide.with(binding.ivRadnomMeal).load(meal.getStrMealThumb()).placeholder(R.drawable.image_placeholder).transition(DrawableTransitionOptions.withCrossFade()).into(binding.ivRadnomMeal);
+        Glide.with(binding.ivRadnomMeal)
+                .load(meal.getStrMealThumb())
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(binding.ivRadnomMeal);
         binding.setRandomMeal(meal);
         binding.randomMealShimmer.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_anim));
         new Handler().postDelayed(() -> {

@@ -14,8 +14,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 
 import com.ewida.mealmaster.R;
+import com.ewida.mealmaster.auth.AuthActivity;
 import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.local.UserLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
@@ -86,7 +88,12 @@ public class SavedFragment extends Fragment implements SavedMealsContracts.View,
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getSavedMeals();
+        if(presenter.isGuest()){
+            showLoginRequiredLayout();
+        }else{
+            binding.progressBar.setVisibility(View.VISIBLE);
+            presenter.getSavedMeals();
+        }
     }
 
     private void initViews(){
@@ -94,10 +101,22 @@ public class SavedFragment extends Fragment implements SavedMealsContracts.View,
         binding.rvSavedMeals.setAdapter(adapter);
     }
 
+    private void showLoginRequiredLayout(){
+        binding.loginRequiredLayout.setVisibility(View.VISIBLE);
+        binding.loginRequiredLayout.findViewById(R.id.btnLogin).setOnClickListener(view->{
+            navigateToAuthActivity();
+        });
+    }
+
+    private void navigateToAuthActivity(){
+        requireActivity().startActivity(new Intent(requireActivity(), AuthActivity.class));
+    }
+
     @Override
     public void showSavedMeals(List<Meal> meals) {
-        this.meals = meals;
         binding.progressBar.setVisibility(View.GONE);
+        binding.emptyState.setVisibility(View.GONE);
+        this.meals = meals;
         List<Meal> newList = new ArrayList<>(meals);
         adapter.submitList(newList);
     }
@@ -105,6 +124,22 @@ public class SavedFragment extends Fragment implements SavedMealsContracts.View,
     @Override
     public void showMessage(String msg) {
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showEmptyState() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.emptyState.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showUnsavedSnackBar(Meal meal) {
+        Snackbar snackbar = Snackbar
+                .make(binding.getRoot(), "Meal unsaved successfully", Snackbar.LENGTH_LONG)
+                .setAction("Undo", view -> {
+                    presenter.saveMeal(meal);
+                });
+        snackbar.show();
     }
 
     @Override

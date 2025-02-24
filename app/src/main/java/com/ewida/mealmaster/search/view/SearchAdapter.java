@@ -61,6 +61,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ItemViewHo
             Glide.with(binding.ivMeal)
                     .load(meal.getStrMealThumb())
                     .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.ivMeal);
             binding.setMeal(meal);

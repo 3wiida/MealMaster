@@ -66,6 +66,7 @@ public class RegisterPresenter implements RegisterContracts.Presenter {
         repo.saveUserData(user).addOnSuccessListener(unused -> {
             repo.setCurrentUserName(user.getName());
             repo.setCurrentUserId(user.getId());
+            repo.setAfterAuth(true);
             registerView.navigateToHomeScreen();
         }).addOnFailureListener(error -> {
             registerView.showErrorMessage(error.getMessage());
@@ -88,7 +89,7 @@ public class RegisterPresenter implements RegisterContracts.Presenter {
             repo.authWithGoogle(account).addOnSuccessListener(authResult -> {
                 repo.setCurrentUserName(authResult.getUser().getDisplayName());
                 repo.setCurrentUserId(authResult.getUser().getUid());
-                registerView.navigateToHomeScreen();
+                insertUserInDatabase(new User(authResult.getUser().getUid(),authResult.getUser().getDisplayName()));
             }).addOnFailureListener(error -> registerView.showErrorMessage(error.getMessage()));
         } catch (ApiException exception) {
             registerView.showErrorMessage(exception.getMessage());

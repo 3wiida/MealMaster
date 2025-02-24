@@ -87,4 +87,14 @@ public class UserRepositoryImpl implements UserRepository {
     public void setFirstTime(boolean isFirstTime) {
         userLocalDataSource.setFirstTime(isFirstTime);
     }
+
+    @Override
+    public Boolean isAfterAuth() {
+        return userLocalDataSource.isAfterAuth();
+    }
+
+    @Override
+    public void setAfterAuth(boolean isAfterAuth) {
+        userLocalDataSource.setAfterAuth(isAfterAuth);
+    }
 }

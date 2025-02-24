@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.data.model.ExploreItem;
 import com.ewida.mealmaster.databinding.ExploreItemLayoutBinding;
 
@@ -59,6 +60,7 @@ public class ExploreItemAdapter extends RecyclerView.Adapter<ExploreItemAdapter.
             });
             Glide.with(binding.ivItemThumb)
                     .load(item.getThumbnail())
+                    .error(R.drawable.image_placeholder)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.ivItemThumb);
         }

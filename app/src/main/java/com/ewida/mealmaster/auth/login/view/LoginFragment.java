@@ -1,17 +1,21 @@
 package com.ewida.mealmaster.auth.login.view;
 
 import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.auth.login.LoginContracts;
 import com.ewida.mealmaster.auth.login.presenter.LoginPresenter;
@@ -106,10 +110,11 @@ public class LoginFragment extends Fragment implements LoginContracts.View {
     public void navigateToHomeScreen() {
         binding.btnLogin.setLoading(false);
         binding.btnGoogleLogin.setLoading(false);
-        if (getActivity() != null) {
-            startActivity(new Intent(getActivity(), MainActivity.class));
-            getActivity().finish();
-        }
+        Intent mainActivityIntent = new Intent(requireActivity(), MainActivity.class);
+        mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        requireActivity().startActivity(mainActivityIntent);
+        requireActivity().finish();
+
     }
 
     @Override

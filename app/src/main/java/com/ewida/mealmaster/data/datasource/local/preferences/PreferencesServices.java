@@ -7,4 +7,6 @@ public interface PreferencesServices {
     void setCurrentUserId(String id);
     Boolean isFirstTime();
     void setFirstTime(boolean isFirstTime);
+    Boolean isAfterAuth();
+    void setAfterAuth(boolean isAfterAuth);
 }

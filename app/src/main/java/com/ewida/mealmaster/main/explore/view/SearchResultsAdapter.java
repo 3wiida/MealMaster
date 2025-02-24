@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.data.model.ExploreItem;
 import com.ewida.mealmaster.databinding.ExploreItemLayoutBinding;
 import com.ewida.mealmaster.databinding.ExploreSearchItemLayoutBinding;
@@ -58,6 +59,8 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         public void bind(ExploreItem item){
             Glide.with(binding.ivItemThumb)
                     .load(item.getThumbnail())
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.ivItemThumb);
             binding.setItem(item);

@@ -9,6 +9,7 @@ import com.ewida.mealmaster.data.model.Meal;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -43,7 +44,7 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     }
 
     @Override
-    public Single<List<Meal>> getSavedMeals(String userId) {
+    public Flowable<List<Meal>> getSavedMeals(String userId) {
         return dao.getSavedMeals(userId);
     }
 

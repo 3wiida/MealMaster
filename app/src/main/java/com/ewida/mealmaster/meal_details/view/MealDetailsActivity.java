@@ -95,6 +95,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         Glide.with(binding.ivMealThumbnail)
                 .load(meal.getStrMealThumb())
                 .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.ivMealThumbnail);
         binding.setMeal(meal);

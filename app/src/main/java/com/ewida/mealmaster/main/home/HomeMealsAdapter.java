@@ -52,7 +52,12 @@ public class HomeMealsAdapter extends RecyclerView.Adapter<HomeMealsAdapter.Item
         }
 
         public void bind(CategoryMeal meal) {
-            Glide.with(binding.ivMeal).load(meal.getStrMealThumb()).placeholder(R.drawable.image_placeholder).transition(DrawableTransitionOptions.withCrossFade()).into(binding.ivMeal);
+            Glide.with(binding.ivMeal)
+                    .load(meal.getStrMealThumb())
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(binding.ivMeal);
             binding.setMeal(meal);
             binding.iconMeal.setImageResource(isVegetarian ? R.drawable.ic_vegetarian : R.drawable.ic_dessert);
             binding.getRoot().setOnClickListener(view -> {

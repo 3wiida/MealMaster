@@ -1,6 +1,7 @@
 package com.ewida.mealmaster.data.repository.meals_repo;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSource;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSource;
@@ -16,7 +17,9 @@ import com.google.firebase.database.DataSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 
 public class MealsRepositoryImpl implements MealsRepository {
@@ -99,12 +102,18 @@ public class MealsRepositoryImpl implements MealsRepository {
 
     @SuppressLint("CheckResult")
     @Override
-    public Single<List<Meal>> getSavedMeals(String userId, boolean isAfterAuth) {
-        return Single.create(emitter -> {
+    public Flowable<List<Meal>> getSavedMeals(String userId, boolean isAfterAuth) {
+        return Flowable.create(emitter -> {
             if (!NetworkUtils.isNetworkAvailable()) {
-                localDataSource.getSavedMeals(userId).subscribe(emitter::onSuccess, emitter::onError);
+                Log.d("```TAG```", "getSavedMeals: no network");
+                localDataSource.getSavedMeals(userId).subscribe(
+                        emitter::onNext,
+                        emitter::onError
+                );
             } else {
+                Log.d("```TAG```", "getSavedMeals: there is network");
                 if(isAfterAuth){
+                    Log.d("```TAG```", "getSavedMeals: after auth");
                     remoteDataSource.getSavedMeals(userId).get().addOnSuccessListener(dataSnapshot -> {
                         List<Meal> meals = new ArrayList<>();
                         for (DataSnapshot mealSnapshot : dataSnapshot.getChildren()) {
@@ -115,14 +124,15 @@ public class MealsRepositoryImpl implements MealsRepository {
                         }
 
                         localDataSource.saveMeals(meals).subscribe(
-                                () -> localDataSource.getSavedMeals(userId).subscribe(emitter::onSuccess, emitter::onError),
+                                () -> localDataSource.getSavedMeals(userId).subscribe(emitter::onNext, emitter::onError),
                                 emitter::onError
                         );
                     }).addOnFailureListener(emitter::onError);
                 }else{
-                    localDataSource.getSavedMeals(userId).subscribe(emitter::onSuccess, emitter::onError);
+                    Log.d("```TAG```", "getSavedMeals: not after auth");
+                    localDataSource.getSavedMeals(userId).subscribe(emitter::onNext, emitter::onError);
                 }
             }
-        });
+        }, BackpressureStrategy.DROP);
     }
 }

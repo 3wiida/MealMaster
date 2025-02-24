@@ -63,13 +63,23 @@ public class LoginPresenter implements LoginContracts.Presenter {
             String username = dataSnapshot.getValue(User.class).getName();
             repo.setCurrentUserName(username);
             repo.setCurrentUserId(id);
+            repo.setAfterAuth(true);
             loginView.navigateToHomeScreen();
         }).addOnFailureListener(error -> {
             loginView.showErrorMessage(error.getMessage());
         });
     }
 
-
+    private void insertUserInDatabase(User user) {
+        repo.saveUserData(user).addOnSuccessListener(unused -> {
+            repo.setCurrentUserName(user.getName());
+            repo.setCurrentUserId(user.getId());
+            repo.setAfterAuth(true);
+            loginView.navigateToHomeScreen();
+        }).addOnFailureListener(error -> {
+            loginView.showErrorMessage(error.getMessage());
+        });
+    }
 
     @Override
     public Intent getGoogleSignInIntent(Context context) {
@@ -87,7 +97,7 @@ public class LoginPresenter implements LoginContracts.Presenter {
             repo.authWithGoogle(account).addOnSuccessListener(authResult -> {
                 repo.setCurrentUserName(authResult.getUser().getDisplayName());
                 repo.setCurrentUserId(authResult.getUser().getUid());
-                loginView.navigateToHomeScreen();
+                insertUserInDatabase(new User(authResult.getUser().getUid(),authResult.getUser().getDisplayName()));
             }).addOnFailureListener(error -> {
                 loginView.showErrorMessage(error.getMessage());
             });

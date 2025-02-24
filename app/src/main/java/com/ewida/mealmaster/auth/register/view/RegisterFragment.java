@@ -114,10 +114,10 @@ public class RegisterFragment extends Fragment implements RegisterContracts.View
     public void navigateToHomeScreen() {
         binding.btnCreateAccount.setLoading(false);
         binding.btnGoogleRegister.setLoading(false);
-        if (getActivity() != null) {
-            startActivity(new Intent(getActivity(), MainActivity.class));
-            getActivity().finish();
-        }
+        Intent mainActivityIntent = new Intent(requireActivity(), MainActivity.class);
+        mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        requireActivity().startActivity(mainActivityIntent);
+        requireActivity().finish();
     }
 
     @Override

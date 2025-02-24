@@ -10,6 +10,7 @@ import com.ewida.mealmaster.data.model.MealResponse;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 
 
@@ -26,5 +27,5 @@ public interface MealsRepository {
     Completable saveMeal(Meal meal);
     Completable unSaveMeal(Meal meal);
     Single<Boolean> isMealSaved(String mealId, String userId);
-    Single<List<Meal>> getSavedMeals(String userId, boolean isAfterAuth);
+    Flowable<List<Meal>> getSavedMeals(String userId, boolean isAfterAuth);
 }

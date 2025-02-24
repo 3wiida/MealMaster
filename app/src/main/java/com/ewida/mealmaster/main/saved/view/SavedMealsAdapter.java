@@ -47,6 +47,7 @@ public class SavedMealsAdapter extends ListAdapter<Meal, SavedMealsAdapter.ItemV
             Glide.with(binding.ivMealThumbnail)
                     .load(meal.getStrMealThumb())
                     .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.ivMealThumbnail);
             binding.tvMealTitle.setText(meal.getStrMeal());

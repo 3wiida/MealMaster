@@ -47,7 +47,12 @@ public class ExploreMealsAdapter extends RecyclerView.Adapter<ExploreMealsAdapte
         }
 
         public void bind(CategoryMeal meal) {
-            Glide.with(binding.ivMeal).load(meal.getStrMealThumb()).placeholder(R.drawable.image_placeholder).transition(DrawableTransitionOptions.withCrossFade()).into(binding.ivMeal);
+            Glide.with(binding.ivMeal)
+                    .load(meal.getStrMealThumb())
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(binding.ivMeal);
             binding.setMeal(meal);
             binding.getRoot().setOnClickListener(view -> onMealClickListener.onMealClicked(meal));
         }

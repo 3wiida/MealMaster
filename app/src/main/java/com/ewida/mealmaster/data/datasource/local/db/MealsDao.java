@@ -5,14 +5,12 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
-//import com.ewida.mealmaster.data.model.SavedMealDBModel;
-
 import com.ewida.mealmaster.data.model.Meal;
 
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 
 @Dao
@@ -30,5 +28,5 @@ public interface MealsDao {
     Single<Boolean> isMealSaved(String mealId, String userId);
 
     @Query("SELECT * FROM SAVED_MEALS WHERE userId = :userId")
-    Single<List<Meal>> getSavedMeals(String userId);
+    Flowable<List<Meal>> getSavedMeals(String userId);
 }

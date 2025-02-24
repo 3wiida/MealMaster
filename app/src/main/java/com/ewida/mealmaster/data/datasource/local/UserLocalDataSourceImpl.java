@@ -49,4 +49,14 @@ public class UserLocalDataSourceImpl implements UserLocalDataSource {
     public void setFirstTime(boolean isFirstTime) {
         sharedPreferences.edit().putBoolean(Constants.SharedPref.IS_FIRST_OPEN_KEY, isFirstTime).apply();
     }
+
+    @Override
+    public Boolean isAfterAuth() {
+        return sharedPreferences.getBoolean(Constants.SharedPref.IS_AFTER_AUTH_KEY, true);
+    }
+
+    @Override
+    public void setAfterAuth(boolean isFirstTime) {
+        sharedPreferences.edit().putBoolean(Constants.SharedPref.IS_AFTER_AUTH_KEY, isFirstTime).apply();
+    }
 }

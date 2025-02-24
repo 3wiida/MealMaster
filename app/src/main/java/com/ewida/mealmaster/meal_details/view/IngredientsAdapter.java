@@ -52,6 +52,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             Glide.with(binding.ivIngredient)
                     .load(ingredient.getThumbnail())
                     .transition(DrawableTransitionOptions.withCrossFade())
+                    .error(R.drawable.image_placeholder)
                     .into(binding.ivIngredient);
         }
     }
