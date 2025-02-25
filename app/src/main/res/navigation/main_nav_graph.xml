@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_explore" />
     <fragment
         android:id="@+id/plansFragment"
-        android:name="com.ewida.mealmaster.main.plans.PlansFragment"
+        android:name="com.ewida.mealmaster.main.plans.view.PlansFragment"
         android:label="fragment_plans"
         tools:layout="@layout/fragment_plans" />
     <fragment

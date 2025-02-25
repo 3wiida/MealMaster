@@ -3,8 +3,10 @@ package com.ewida.mealmaster.meal_details.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class MealDetailsActivity extends AppCompatActivity implements MealDetailsContracts.View {
@@ -67,12 +70,15 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     private void initClicks() {
         binding.icBack.setOnClickListener(view -> finish());
         binding.icSave.setOnClickListener(view -> {
-            if(isSaved){
+            if (isSaved) {
                 presenter.unSaveMeal(meal);
-            }else{
+            } else {
                 presenter.saveMeal(meal);
             }
             setSavedIcon(!isSaved);
+        });
+        binding.icPlan.setOnClickListener(view -> {
+            showDatePickerDialog();
         });
     }
 
@@ -140,6 +146,27 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     @Override
     public void showMessage(String msg) {
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = selectedDay + "-" + (selectedMonth + 1) + "-" + selectedYear;
+                    presenter.planMeal(this.meal, selectedDate);
+                },
+                year, month, day
+        );
+
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+        calendar.add(Calendar.MONTH, 1);
+        datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+        datePickerDialog.show();
     }
 
 }

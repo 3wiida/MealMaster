@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.com.fasterxml.jackson.core.JsonPointer.compile
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
@@ -9,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.ewida.mealmaster"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -84,4 +86,7 @@ dependencies {
     //Room
     implementation (libs.room.runtime)
     annotationProcessor (libs.room.compiler)
+
+    //Calendar
+    implementation(libs.view)
 }

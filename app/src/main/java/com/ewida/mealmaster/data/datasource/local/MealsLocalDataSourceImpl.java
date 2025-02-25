@@ -5,6 +5,7 @@ import android.content.Context;
 import com.ewida.mealmaster.data.datasource.local.db.MealsDao;
 import com.ewida.mealmaster.data.datasource.local.db.MealsDatabase;
 import com.ewida.mealmaster.data.model.Meal;
+import com.ewida.mealmaster.data.model.Plan;
 
 import java.util.List;
 
@@ -52,5 +53,26 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     public Completable saveMeals(List<Meal> meals) {
         return Completable.fromAction(() -> dao.insertMeals(meals))
                 .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Completable planMeal(Plan plan) {
+        return dao.planMeal(plan);
+    }
+
+    @Override
+    public Completable planMeals(List<Plan> plans) {
+        return Completable.fromAction(() -> dao.planMeals(plans))
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Completable unPlanMeal(Plan plan) {
+        return dao.unPlanMeal(plan);
+    }
+
+    @Override
+    public Flowable<List<Plan>> getPlanedMeals(String userId, String date) {
+        return dao.getPlanedMeals(userId, date);
     }
 }

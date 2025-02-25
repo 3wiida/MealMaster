@@ -64,4 +64,14 @@
     <string name="saved_meals_empty_state_des">Browse delicious recipes and save your favorites to find them easily later!</string>
     <string name="oops_feature_unavailable">Oops! Feature Unavailable</string>
     <string name="login_required_des">Saving meals is only available for registered users. Sign up or log in to enjoy this feature!</string>
+    <string name="your_plans">Your Plans</string>
+    <string name="fri">Fri</string>
+    <string name="thr">Thr</string>
+    <string name="wed">Wed</string>
+    <string name="tue">Tue</string>
+    <string name="mon">Mon</string>
+    <string name="sun">Sun</string>
+    <string name="sat">Sat</string>
+    <string name="your_meal_plan_is_empty">Your Meal Plan is Empty</string>
+    <string name="planned_meals_empty_state_des">Start planning your meals and make cooking easier!</string>
 </resources>

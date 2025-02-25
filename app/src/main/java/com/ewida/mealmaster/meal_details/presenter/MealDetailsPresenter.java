@@ -1,14 +1,11 @@
 package com.ewida.mealmaster.meal_details.presenter;
 
 import android.annotation.SuppressLint;
-
 import com.ewida.mealmaster.data.model.Meal;
-
+import com.ewida.mealmaster.data.model.Plan;
 import com.ewida.mealmaster.data.repository.meals_repo.MealsRepository;
 import com.ewida.mealmaster.data.repository.user_repo.UserRepository;
 import com.ewida.mealmaster.meal_details.MealDetailsContracts;
-import com.google.firebase.auth.FirebaseAuth;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -64,5 +61,19 @@ public class MealDetailsPresenter implements MealDetailsContracts.Presenter {
                 mealId,
                 userRepo.getCurrentUserId()
         ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(view::setSavedIcon);
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void planMeal(Meal meal, String date) {
+        meal.setUserId(userRepo.getCurrentUserId());
+        Plan plan = new Plan(
+                date,
+                meal
+        );
+        mealsRepo.planMeal(plan).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                () -> view.showMessage("You planned this meal on " + date),
+                error -> view.showMessage(error.getMessage())
+        );
     }
 }

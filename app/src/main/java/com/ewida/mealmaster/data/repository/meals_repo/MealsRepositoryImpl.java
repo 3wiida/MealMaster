@@ -11,6 +11,7 @@ import com.ewida.mealmaster.data.model.CategoryMealsResponse;
 import com.ewida.mealmaster.data.model.IngredientsResponse;
 import com.ewida.mealmaster.data.model.Meal;
 import com.ewida.mealmaster.data.model.MealResponse;
+import com.ewida.mealmaster.data.model.Plan;
 import com.ewida.mealmaster.utils.NetworkUtils;
 import com.google.firebase.database.DataSnapshot;
 
@@ -112,7 +113,7 @@ public class MealsRepositoryImpl implements MealsRepository {
                 );
             } else {
                 Log.d("```TAG```", "getSavedMeals: there is network");
-                if(isAfterAuth){
+                if (isAfterAuth) {
                     Log.d("```TAG```", "getSavedMeals: after auth");
                     remoteDataSource.getSavedMeals(userId).get().addOnSuccessListener(dataSnapshot -> {
                         List<Meal> meals = new ArrayList<>();
@@ -128,11 +129,31 @@ public class MealsRepositoryImpl implements MealsRepository {
                                 emitter::onError
                         );
                     }).addOnFailureListener(emitter::onError);
-                }else{
+                } else {
                     Log.d("```TAG```", "getSavedMeals: not after auth");
                     localDataSource.getSavedMeals(userId).subscribe(emitter::onNext, emitter::onError);
                 }
             }
         }, BackpressureStrategy.DROP);
+    }
+
+    @Override
+    public Completable planMeal(Plan plan) {
+        return localDataSource.planMeal(plan);
+    }
+
+    @Override
+    public Completable planMeals(List<Plan> plans) {
+        return localDataSource.planMeals(plans);
+    }
+
+    @Override
+    public Completable unPlanMeal(Plan plan) {
+        return localDataSource.unPlanMeal(plan);
+    }
+
+    @Override
+    public Flowable<List<Plan>> getPlanedMeals(String userId, String date) {
+        return localDataSource.getPlanedMeals(userId, date);
     }
 }

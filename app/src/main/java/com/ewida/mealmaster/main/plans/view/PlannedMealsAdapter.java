@@ -1,24 +1,22 @@
-package com.ewida.mealmaster.main.saved.view;
+package com.ewida.mealmaster.main.plans.view;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.data.model.Meal;
-import com.ewida.mealmaster.databinding.SavedItemLayoutBinding;
+import com.ewida.mealmaster.databinding.PlanedItemLayoutBinding;
 
-public class SavedMealsAdapter extends ListAdapter<Meal, SavedMealsAdapter.ItemViewHolder> {
 
+public class PlannedMealsAdapter extends ListAdapter<Meal, PlannedMealsAdapter.ItemViewHolder> {
     private final OnMealClickListener onMealClickListener;
 
-    protected SavedMealsAdapter(OnMealClickListener onMealClickListener) {
+    protected PlannedMealsAdapter(OnMealClickListener onMealClickListener) {
         super(DIFF_CALLBACK);
         this.onMealClickListener = onMealClickListener;
     }
@@ -26,7 +24,7 @@ public class SavedMealsAdapter extends ListAdapter<Meal, SavedMealsAdapter.ItemV
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        SavedItemLayoutBinding binding = SavedItemLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        PlanedItemLayoutBinding binding = PlanedItemLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ItemViewHolder(binding);
     }
 
@@ -36,9 +34,9 @@ public class SavedMealsAdapter extends ListAdapter<Meal, SavedMealsAdapter.ItemV
     }
 
     public final class ItemViewHolder extends RecyclerView.ViewHolder {
-        private final SavedItemLayoutBinding binding;
+        private final PlanedItemLayoutBinding binding;
 
-        public ItemViewHolder(SavedItemLayoutBinding binding) {
+        public ItemViewHolder(PlanedItemLayoutBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
@@ -54,8 +52,8 @@ public class SavedMealsAdapter extends ListAdapter<Meal, SavedMealsAdapter.ItemV
             binding.getRoot().setOnClickListener(view->{
                 onMealClickListener.onMealClicked(meal);
             });
-            binding.icSave.setOnClickListener(view->{
-                onMealClickListener.onUnSaveClicked(meal);
+            binding.icDelete.setOnClickListener(view->{
+                onMealClickListener.onRemoveClicked(meal);
             });
         }
     }
@@ -75,6 +73,6 @@ public class SavedMealsAdapter extends ListAdapter<Meal, SavedMealsAdapter.ItemV
 
     protected interface OnMealClickListener{
         void onMealClicked(Meal meal);
-        void onUnSaveClicked(Meal meal);
+        void onRemoveClicked(Meal meal);
     }
 }

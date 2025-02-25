@@ -6,6 +6,7 @@ import com.ewida.mealmaster.data.model.CategoryMealsResponse;
 import com.ewida.mealmaster.data.model.IngredientsResponse;
 import com.ewida.mealmaster.data.model.Meal;
 import com.ewida.mealmaster.data.model.MealResponse;
+import com.ewida.mealmaster.data.model.Plan;
 
 import java.util.List;
 
@@ -28,4 +29,8 @@ public interface MealsRepository {
     Completable unSaveMeal(Meal meal);
     Single<Boolean> isMealSaved(String mealId, String userId);
     Flowable<List<Meal>> getSavedMeals(String userId, boolean isAfterAuth);
+    Completable planMeal(Plan plan);
+    Completable planMeals(List<Plan> plans);
+    Completable unPlanMeal(Plan plan);
+    Flowable<List<Plan>> getPlanedMeals(String userId, String date);
 }

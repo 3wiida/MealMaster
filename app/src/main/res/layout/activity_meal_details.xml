@@ -61,6 +61,25 @@
                         android:src="@drawable/ic_saved" />
                 </androidx.cardview.widget.CardView>
 
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/planCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="24dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/saveCard">
+
+                    <ImageView
+                        android:id="@+id/icPlan"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_plan" />
+                </androidx.cardview.widget.CardView>
+
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/startGuidLine"
                     android:layout_width="wrap_content"
