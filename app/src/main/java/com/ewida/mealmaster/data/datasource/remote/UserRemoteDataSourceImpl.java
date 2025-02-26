@@ -1,7 +1,10 @@
 package com.ewida.mealmaster.data.datasource.remote;
 
+import com.ewida.mealmaster.data.model.Meal;
+import com.ewida.mealmaster.data.model.Plan;
 import com.ewida.mealmaster.data.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -9,6 +12,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.List;
 
 public class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
@@ -22,8 +27,8 @@ public class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         this.db = db;
     }
 
-    public static UserRemoteDataSource getInstance(FirebaseAuth auth, FirebaseDatabase db){
-        if(instance == null){
+    public static UserRemoteDataSource getInstance(FirebaseAuth auth, FirebaseDatabase db) {
+        if (instance == null) {
             instance = new UserRemoteDataSourceImpl(auth, db);
         }
         return instance;
@@ -57,9 +62,41 @@ public class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
     @Override
     public String getCurrentUserEmail() {
-        if(auth.getCurrentUser()!= null){
+        if (auth.getCurrentUser() != null) {
             return auth.getCurrentUser().getEmail();
         }
         return "-";
+    }
+
+    @Override
+    public void updateUserData(List<Meal> meals, List<Plan> plans) {
+        db.getReference().child(USER_DB_PATH).child(auth.getCurrentUser().getUid()).child("Saved").removeValue().addOnSuccessListener(unused -> {
+            meals.forEach(this::saveMealInDB);
+        });
+        db.getReference().child(USER_DB_PATH).child(auth.getCurrentUser().getUid()).child("Plans").removeValue().addOnSuccessListener(unused -> {
+            plans.forEach(this::savePlanInDB);
+        });
+    }
+
+    private void saveMealInDB(Meal meal) {
+        db.getReference().child(USER_DB_PATH)
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("Saved")
+                .child(meal.getIdMeal())
+                .setValue(meal);
+    }
+
+    private void savePlanInDB(Plan plan) {
+        String planId = plan.getMeal().getIdMeal() + plan.getDate();
+        db.getReference().child(USER_DB_PATH)
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("Plans")
+                .child(planId)
+                .setValue(plan);
+    }
+
+    @Override
+    public void logoutUser() {
+        auth.signOut();
     }
 }

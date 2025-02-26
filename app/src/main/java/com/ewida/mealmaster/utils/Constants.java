@@ -11,7 +11,6 @@ public class Constants {
         public static final String IS_FIRST_OPEN_KEY = "IS_FIRST_OPEN_KEY";
         public static final String USER_NAME_KEY = "USER_NAME_KEY";
         public static final String USER_ID_KEY = "USER_ID_KEY";
-        public static final String IS_AFTER_AUTH_KEY = "IS_AFTER_AUTH_KEY";
     }
 
 }

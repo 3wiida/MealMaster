@@ -32,4 +32,8 @@ public interface MealsLocalDataSource {
     Single<List<Plan>> getAllPlans();
 
     Single<UserStatistics> getUserStatistics();
+
+    Completable clearSavedMeals();
+
+    Completable clearPlans();
 }

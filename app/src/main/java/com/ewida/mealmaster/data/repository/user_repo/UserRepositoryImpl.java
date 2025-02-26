@@ -1,19 +1,19 @@
 package com.ewida.mealmaster.data.repository.user_repo;
 
 import android.annotation.SuppressLint;
+import android.util.Pair;
 
 import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSource;
 import com.ewida.mealmaster.data.datasource.local.UserLocalDataSource;
 import com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSource;
 import com.ewida.mealmaster.data.model.Profile;
 import com.ewida.mealmaster.data.model.User;
-import com.ewida.mealmaster.data.model.UserStatistics;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DatabaseReference;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -115,5 +115,29 @@ public class UserRepositoryImpl implements UserRepository {
                     emitter::onError
             );
         });
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public Completable backupUserData() {
+        return mealsLocalDataSource.getSavedMeals().firstOrError()
+                .zipWith(mealsLocalDataSource.getAllPlans(), Pair::new)
+                .flatMapCompletable(pair -> {
+                    userRemoteDataSource.updateUserData(pair.first, pair.second);
+                    return Completable.complete();
+                })
+                .subscribeOn(Schedulers.io());
+    }
+
+
+    @SuppressLint("CheckResult")
+    @Override
+    public Completable endUserSession() {
+        userLocalDataSource.clearUserSession();
+        return mealsLocalDataSource.clearSavedMeals()
+                .subscribeOn(Schedulers.io())
+                .andThen(mealsLocalDataSource.clearPlans())
+                .andThen(Completable.fromAction(userRemoteDataSource::logoutUser))
+                .subscribeOn(Schedulers.io());
     }
 }

@@ -83,4 +83,14 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     public Single<UserStatistics> getUserStatistics() {
         return dao.getUerStatistics();
     }
+
+    @Override
+    public Completable clearSavedMeals() {
+        return dao.clearSavedMeals();
+    }
+
+    @Override
+    public Completable clearPlans() {
+        return dao.clearPlans();
+    }
 }

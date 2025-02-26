@@ -194,9 +194,4 @@ public class MealsRepositoryImpl implements MealsRepository {
     public Flowable<List<Plan>> getPlanedMeals(String date) {
         return localDataSource.getPlanedMeals(date);
     }
-
-    @Override
-    public Single<List<Plan>> getAllPlans() {
-        return localDataSource.getAllPlans();
-    }
 }

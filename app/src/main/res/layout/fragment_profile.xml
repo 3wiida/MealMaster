@@ -171,6 +171,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 app:btnIcon="@drawable/ic_backup"
+                app:btnDisabledBackgroundRes="@drawable/disabled_app_btn_background"
                 app:btnText="@string/backup" />
 
             <com.ewida.mealmaster.app_components.AppButton

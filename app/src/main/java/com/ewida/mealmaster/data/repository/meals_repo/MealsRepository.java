@@ -50,5 +50,4 @@ public interface MealsRepository {
 
     Completable syncUserData(String userId);
 
-    Single<List<Plan>> getAllPlans();
 }

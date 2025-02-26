@@ -26,4 +26,22 @@ public class ProfilePresenter implements ProfileContracts.Presenter {
                 error -> view.showMessage(error.getMessage())
         );
     }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void backupUserData() {
+        userRepo.backupUserData().observeOn(AndroidSchedulers.mainThread()).subscribe(
+                view::onBackupCompleted,
+                error-> view.showMessage(error.getMessage())
+        );
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void logout() {
+        userRepo.endUserSession().observeOn(AndroidSchedulers.mainThread()).subscribe(
+                view::onLogoutProcessCompleted,
+                error-> view.showMessage("An error occured while logging out, try again later")
+        );
+    }
 }

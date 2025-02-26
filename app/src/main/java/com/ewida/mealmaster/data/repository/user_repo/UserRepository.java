@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DatabaseReference;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public interface UserRepository {
@@ -33,4 +34,8 @@ public interface UserRepository {
     void setFirstTime(boolean isFirstTime);
 
     Single<Profile> getUserProfile();
+
+    Completable backupUserData();
+
+    Completable endUserSession();
 }

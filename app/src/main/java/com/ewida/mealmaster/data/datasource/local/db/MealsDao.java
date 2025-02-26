@@ -50,4 +50,10 @@ public interface MealsDao {
 
     @Query("SELECT (SELECT COUNT(*) FROM SAVED_MEALS) AS savedItemsCount, (SELECT COUNT(*) FROM PLANS) AS plansCount")
     Single<UserStatistics> getUerStatistics();
+
+    @Query("DELETE FROM SAVED_MEALS")
+    Completable clearSavedMeals();
+
+    @Query("DELETE FROM PLANS")
+    Completable clearPlans();
 }

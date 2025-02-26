@@ -26,10 +26,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class ProfileFragment extends Fragment implements ProfileContracts.View {
+public class ProfileFragment extends Fragment implements ProfileContracts.View, LogoutDialog.OnLogoutConfirmedListener {
 
     private FragmentProfileBinding binding;
     private ProfileContracts.Presenter presenter;
+    private LogoutDialog logoutDialog;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +50,19 @@ public class ProfileFragment extends Fragment implements ProfileContracts.View {
                 )
         );
         presenter.getUserProfile();
+        initClicks();
+    }
+
+    private void initClicks() {
+        binding.btnBackup.setOnClickListener(view -> {
+            binding.btnBackup.setLoading(true);
+            presenter.backupUserData();
+        });
+
+        binding.btnLogout.setOnClickListener(view -> {
+            logoutDialog = new LogoutDialog(requireContext(), this);
+            logoutDialog.show();
+        });
     }
 
     @Override
@@ -59,5 +73,22 @@ public class ProfileFragment extends Fragment implements ProfileContracts.View {
     @Override
     public void showMessage(String msg) {
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackupCompleted() {
+        binding.btnBackup.setLoading(false);
+        showMessage("Backup Completed Successfully");
+    }
+
+    @Override
+    public void onLogoutConfirmed() {
+        presenter.logout();
+    }
+
+    @Override
+    public void onLogoutProcessCompleted() {
+        requireActivity().startActivity(new Intent(requireActivity(), AuthActivity.class));
+        requireActivity().finish();
     }
 }

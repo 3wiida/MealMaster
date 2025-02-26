@@ -13,4 +13,6 @@ public interface FirebaseAuthContract {
     Task<AuthResult> authWithGoogle(GoogleSignInAccount account);
 
     String getCurrentUserEmail();
+
+    void logoutUser();
 }

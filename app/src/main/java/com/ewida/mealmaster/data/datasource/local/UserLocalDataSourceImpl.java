@@ -1,5 +1,8 @@
 package com.ewida.mealmaster.data.datasource.local;
 
+import static com.ewida.mealmaster.utils.Constants.SharedPref.USER_ID_KEY;
+import static com.ewida.mealmaster.utils.Constants.SharedPref.USER_NAME_KEY;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -26,12 +29,12 @@ public class UserLocalDataSourceImpl implements UserLocalDataSource {
 
     @Override
     public String getCurrentUserName() {
-        return sharedPreferences.getString(Constants.SharedPref.USER_NAME_KEY, "Anonymous Guest");
+        return sharedPreferences.getString(USER_NAME_KEY, "Anonymous Guest");
     }
 
     @Override
     public String getCurrentUserId() {
-        return sharedPreferences.getString(Constants.SharedPref.USER_ID_KEY, null);
+        return sharedPreferences.getString(USER_ID_KEY, null);
     }
 
     @Override
@@ -41,12 +44,12 @@ public class UserLocalDataSourceImpl implements UserLocalDataSource {
 
     @Override
     public void setCurrentUserName(String name) {
-        sharedPreferences.edit().putString(Constants.SharedPref.USER_NAME_KEY, name).apply();
+        sharedPreferences.edit().putString(USER_NAME_KEY, name).apply();
     }
 
     @Override
     public void setCurrentUserId(String id) {
-        sharedPreferences.edit().putString(Constants.SharedPref.USER_ID_KEY, id).apply();
+        sharedPreferences.edit().putString(USER_ID_KEY, id).apply();
     }
 
     @Override
@@ -54,4 +57,12 @@ public class UserLocalDataSourceImpl implements UserLocalDataSource {
         sharedPreferences.edit().putBoolean(Constants.SharedPref.IS_FIRST_OPEN_KEY, isFirstTime).apply();
     }
 
+
+    @Override
+    public void clearUserSession() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(USER_ID_KEY);
+        editor.remove(USER_NAME_KEY);
+        editor.apply();
+    }
 }
