@@ -54,7 +54,8 @@ public class LoginFragment extends Fragment implements LoginContracts.View {
                 ),
                 UserRepositoryImpl.getInstance(
                         UserRemoteDataSourceImpl.getInstance(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance()),
-                        UserLocalDataSourceImpl.getInstance(requireContext())
+                        UserLocalDataSourceImpl.getInstance(requireContext()),
+                        MealsLocalDataSourceImpl.getInstance(requireActivity())
                 )
         );
 

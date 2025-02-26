@@ -2,6 +2,7 @@ package com.ewida.mealmaster.data.datasource.local;
 
 import com.ewida.mealmaster.data.model.Meal;
 import com.ewida.mealmaster.data.model.Plan;
+import com.ewida.mealmaster.data.model.UserStatistics;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface MealsLocalDataSource {
     Flowable<List<Plan>> getPlanedMeals(String date);
 
     Single<List<Plan>> getAllPlans();
+
+    Single<UserStatistics> getUserStatistics();
 }

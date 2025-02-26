@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.auth.register.RegisterContracts;
 import com.ewida.mealmaster.auth.register.presenter.RegisterPresenter;
+import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.local.UserLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.repository.user_repo.UserRepositoryImpl;
@@ -44,7 +45,8 @@ public class RegisterFragment extends Fragment implements RegisterContracts.View
                 this,
                 UserRepositoryImpl.getInstance(
                         UserRemoteDataSourceImpl.getInstance(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance()),
-                        UserLocalDataSourceImpl.getInstance(requireContext())
+                        UserLocalDataSourceImpl.getInstance(requireContext()),
+                        MealsLocalDataSourceImpl.getInstance(requireActivity())
                 )
         );
 

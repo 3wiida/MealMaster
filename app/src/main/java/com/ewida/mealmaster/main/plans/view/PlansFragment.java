@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ewida.mealmaster.R;
+import com.ewida.mealmaster.auth.AuthActivity;
 import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.local.UserLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
@@ -70,11 +71,26 @@ public class PlansFragment extends Fragment implements PlannedMealsContracts.Vie
                 MealsRepositoryImpl.getInstance(
                         MealsRemoteDataSourceImpl.getInstance(),
                         MealsLocalDataSourceImpl.getInstance(requireActivity())
+                ),
+                UserRepositoryImpl.getInstance(
+                        UserRemoteDataSourceImpl.getInstance(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance()),
+                        UserLocalDataSourceImpl.getInstance(requireContext()),
+                        MealsLocalDataSourceImpl.getInstance(requireActivity())
                 )
         );
-        String date = selectedDate.getDayOfMonth() + "-" + selectedDate.getMonthValue() + "-" + selectedDate.getYear();
-        presenter.getPlannedMeals(date);
         initViews();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(presenter.isGuest()){
+            showLoginRequiredLayout();
+        }else{
+            binding.dataGroup.setVisibility(View.VISIBLE);
+            String date = selectedDate.getDayOfMonth() + "-" + selectedDate.getMonthValue() + "-" + selectedDate.getYear();
+            presenter.getPlannedMeals(date);
+        }
     }
 
     @SuppressLint({"SetTextI18n", "CheckResult"})
@@ -189,6 +205,18 @@ public class PlansFragment extends Fragment implements PlannedMealsContracts.Vie
                     presenter.planMeal(plan);
                 });
         snackbar.show();
+    }
+
+    private void showLoginRequiredLayout(){
+        binding.loginRequiredLayout.setVisibility(View.VISIBLE);
+        binding.dataGroup.setVisibility(View.GONE);
+        binding.loginRequiredLayout.findViewById(R.id.btnLogin).setOnClickListener(view->{
+            navigateToAuthActivity();
+        });
+    }
+
+    private void navigateToAuthActivity(){
+        requireActivity().startActivity(new Intent(requireActivity(), AuthActivity.class));
     }
 
     @Override

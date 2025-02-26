@@ -33,7 +33,6 @@ public class SavedMealsPresenter implements SavedMealsContracts.Presenter {
         mealsRepo.getSavedMeals().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 meals -> {
                     view.showSavedMeals(meals);
-                    userRepo.setAfterAuth(false);
                     if (meals.isEmpty()) view.showEmptyState();
                 },
                 error -> view.showMessage(error.getMessage())

@@ -1,34 +1,47 @@
 package com.ewida.mealmaster.data.repository.user_repo;
 
+import android.annotation.SuppressLint;
+
+import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSource;
 import com.ewida.mealmaster.data.datasource.local.UserLocalDataSource;
 import com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSource;
+import com.ewida.mealmaster.data.model.Profile;
 import com.ewida.mealmaster.data.model.User;
+import com.ewida.mealmaster.data.model.UserStatistics;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DatabaseReference;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserRemoteDataSource userRemoteDataSource;
     private final UserLocalDataSource userLocalDataSource;
+    private final MealsLocalDataSource mealsLocalDataSource;
     private static UserRepository instance;
 
 
     private UserRepositoryImpl(
             UserRemoteDataSource userRemoteDataSource,
-            UserLocalDataSource userLocalDataSource
+            UserLocalDataSource userLocalDataSource,
+            MealsLocalDataSource mealsLocalDataSource
     ) {
         this.userRemoteDataSource = userRemoteDataSource;
         this.userLocalDataSource = userLocalDataSource;
+        this.mealsLocalDataSource = mealsLocalDataSource;
     }
 
     public static UserRepository getInstance(
             UserRemoteDataSource userRemoteDataSource,
-            UserLocalDataSource userLocalDataSource
+            UserLocalDataSource userLocalDataSource,
+            MealsLocalDataSource mealsLocalDataSource
     ) {
         if (instance == null) {
-            instance = new UserRepositoryImpl(userRemoteDataSource, userLocalDataSource);
+            instance = new UserRepositoryImpl(userRemoteDataSource, userLocalDataSource, mealsLocalDataSource);
         }
         return instance;
     }
@@ -88,13 +101,19 @@ public class UserRepositoryImpl implements UserRepository {
         userLocalDataSource.setFirstTime(isFirstTime);
     }
 
+    @SuppressLint("CheckResult")
     @Override
-    public Boolean isAfterAuth() {
-        return userLocalDataSource.isAfterAuth();
-    }
-
-    @Override
-    public void setAfterAuth(boolean isAfterAuth) {
-        userLocalDataSource.setAfterAuth(isAfterAuth);
+    public Single<Profile> getUserProfile() {
+        return Single.create(emitter -> {
+            String username = userLocalDataSource.getCurrentUserName();
+            String userEmail = userRemoteDataSource.getCurrentUserEmail();
+            mealsLocalDataSource.getUserStatistics().subscribeOn(Schedulers.io()).subscribe(
+                    data -> {
+                        Profile profile = new Profile(username, userEmail, data);
+                        emitter.onSuccess(profile);
+                    },
+                    emitter::onError
+            );
+        });
     }
 }

@@ -63,7 +63,9 @@ public class SavedFragment extends Fragment implements SavedMealsContracts.View,
                         MealsLocalDataSourceImpl.getInstance(requireContext())),
                 UserRepositoryImpl.getInstance(
                         UserRemoteDataSourceImpl.getInstance(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance()),
-                        UserLocalDataSourceImpl.getInstance(requireContext()))
+                        UserLocalDataSourceImpl.getInstance(requireContext()),
+                        MealsLocalDataSourceImpl.getInstance(requireActivity())
+                )
         );
         initViews();
         //todo this is a temp code to try backup remove it

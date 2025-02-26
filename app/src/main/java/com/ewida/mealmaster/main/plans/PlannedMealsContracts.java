@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.core.Completable;
 
 public interface PlannedMealsContracts {
     interface presenter {
+        boolean isGuest();
         void getPlannedMeals(String date);
 
         void unPlanMeal(Meal meal, String date);

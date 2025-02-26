@@ -27,7 +27,7 @@
         tools:layout="@layout/fragment_saved" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.ewida.mealmaster.main.profile.ProfileFragment"
+        android:name="com.ewida.mealmaster.main.profile.view.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

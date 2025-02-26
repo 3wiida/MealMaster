@@ -11,4 +11,6 @@ public interface FirebaseAuthContract {
     Task<AuthResult> signInWithEmailAndPassword(String email, String password);
 
     Task<AuthResult> authWithGoogle(GoogleSignInAccount account);
+
+    String getCurrentUserEmail();
 }

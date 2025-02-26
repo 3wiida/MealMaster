@@ -8,6 +8,7 @@ import androidx.room.Query;
 
 import com.ewida.mealmaster.data.model.Meal;
 import com.ewida.mealmaster.data.model.Plan;
+import com.ewida.mealmaster.data.model.UserStatistics;
 
 import java.util.List;
 
@@ -46,4 +47,7 @@ public interface MealsDao {
 
     @Query("SELECT * FROM PLANS")
     Single<List<Plan>> getAllPlans();
+
+    @Query("SELECT (SELECT COUNT(*) FROM SAVED_MEALS) AS savedItemsCount, (SELECT COUNT(*) FROM PLANS) AS plansCount")
+    Single<UserStatistics> getUerStatistics();
 }

@@ -2,7 +2,11 @@ package com.ewida.mealmaster.data.datasource.local;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.ewida.mealmaster.data.model.UserStatistics;
 import com.ewida.mealmaster.utils.Constants;
+
+import io.reactivex.rxjava3.core.Single;
 
 public class UserLocalDataSourceImpl implements UserLocalDataSource {
 
@@ -50,13 +54,4 @@ public class UserLocalDataSourceImpl implements UserLocalDataSource {
         sharedPreferences.edit().putBoolean(Constants.SharedPref.IS_FIRST_OPEN_KEY, isFirstTime).apply();
     }
 
-    @Override
-    public Boolean isAfterAuth() {
-        return sharedPreferences.getBoolean(Constants.SharedPref.IS_AFTER_AUTH_KEY, true);
-    }
-
-    @Override
-    public void setAfterAuth(boolean isFirstTime) {
-        sharedPreferences.edit().putBoolean(Constants.SharedPref.IS_AFTER_AUTH_KEY, isFirstTime).apply();
-    }
 }

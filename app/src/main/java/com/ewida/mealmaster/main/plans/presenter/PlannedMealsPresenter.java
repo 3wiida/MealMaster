@@ -18,11 +18,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class PlannedMealsPresenter implements PlannedMealsContracts.presenter {
     private final PlannedMealsContracts.View view;
     private final MealsRepository mealsRepo;
+    private final UserRepository userRepo;
     private Disposable mealsFlowable;
 
-    public PlannedMealsPresenter(PlannedMealsContracts.View view, MealsRepository mealsRepo) {
+    public PlannedMealsPresenter(PlannedMealsContracts.View view, MealsRepository mealsRepo, UserRepository userRepo) {
         this.view = view;
         this.mealsRepo = mealsRepo;
+        this.userRepo = userRepo;
     }
 
     @SuppressLint("CheckResult")
@@ -62,5 +64,10 @@ public class PlannedMealsPresenter implements PlannedMealsContracts.presenter {
                 },
                 error -> view.showMessage(error.getMessage())
         );
+    }
+
+    @Override
+    public boolean isGuest() {
+        return userRepo.getCurrentUserId() == null;
     }
 }

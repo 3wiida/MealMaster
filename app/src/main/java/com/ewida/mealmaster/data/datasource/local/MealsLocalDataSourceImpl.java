@@ -6,6 +6,7 @@ import com.ewida.mealmaster.data.datasource.local.db.MealsDao;
 import com.ewida.mealmaster.data.datasource.local.db.MealsDatabase;
 import com.ewida.mealmaster.data.model.Meal;
 import com.ewida.mealmaster.data.model.Plan;
+import com.ewida.mealmaster.data.model.UserStatistics;
 
 import java.util.List;
 
@@ -76,5 +77,10 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     @Override
     public Single<List<Plan>> getAllPlans() {
         return dao.getAllPlans();
+    }
+
+    @Override
+    public Single<UserStatistics> getUserStatistics() {
+        return dao.getUerStatistics();
     }
 }

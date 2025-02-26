@@ -4,24 +4,188 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="userProfile"
+            type="com.ewida.mealmaster.data.model.Profile" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".main.profile.ProfileFragment">
+        tools:context=".main.profile.view.ProfileFragment">
 
-
-        <TextView
-            android:id="@+id/btnLogout"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuidLine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="log out"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/endGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/topGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="24dp" />
+
+        <TextView
+            android:id="@+id/tvProfileLabel"
+            style="@style/largeTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/profile"
+            android:textAlignment="center"
+            android:textColor="@color/onBackgroundColor"
+            app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+            app:layout_constraintTop_toBottomOf="@+id/topGuideLine" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/ivChef"
+            android:layout_width="132dp"
+            android:layout_height="132dp"
+            android:layout_marginTop="48dp"
+            app:cardCornerRadius="66dp"
+            app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+            app:layout_constraintTop_toBottomOf="@+id/tvProfileLabel">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="4dp"
+                android:src="@drawable/chef_home_image"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                app:layout_constraintTop_toTopOf="@+id/topGuideLine"
+                app:shapeAppearanceOverlay="@style/circular_image_view" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvUsername"
+            style="@style/mediumTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@{userProfile.username}"
+            android:textColor="@color/onBackgroundColor"
+            app:layout_constraintEnd_toEndOf="@+id/ivChef"
+            app:layout_constraintStart_toStartOf="@+id/ivChef"
+            app:layout_constraintTop_toBottomOf="@+id/ivChef"
+            tools:text="Mahmoud Ewida" />
+
+        <TextView
+            android:id="@+id/tvUserEmail"
+            style="@style/normalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:text="@{userProfile.email}"
+            app:layout_constraintEnd_toEndOf="@+id/ivChef"
+            app:layout_constraintStart_toStartOf="@+id/ivChef"
+            app:layout_constraintTop_toBottomOf="@+id/tvUsername"
+            tools:text="mahmoudewida5@gmail.com" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/profile_user_stat_bg"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+            app:layout_constraintTop_toBottomOf="@+id/tvUserEmail">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvPlanCount"
+                    style="@style/mediumTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{userProfile.userStatistics.plansCount+""}'
+                    tools:text="14" />
+
+                <TextView
+                    android:id="@+id/tvPlansLabel"
+                    style="@style/normalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/planned_meal"
+                    android:textColor="@color/primaryColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvSavedCount"
+                    style="@style/mediumTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{userProfile.userStatistics.savedItemsCount+""}'
+                    tools:text="6" />
+
+                <TextView
+                    android:id="@+id/tvSavedLabel"
+                    style="@style/normalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/saved_meals"
+                    android:textColor="@color/primaryColor" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+            app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <com.ewida.mealmaster.app_components.AppButton
+                android:id="@+id/btnBackup"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                app:btnIcon="@drawable/ic_backup"
+                app:btnText="@string/backup" />
+
+            <com.ewida.mealmaster.app_components.AppButton
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                app:btnBackgroundRes="@drawable/logout_btn_bg"
+                app:btnIcon="@drawable/ic_logout"
+                app:btnText="@string/logout"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+                app:layout_constraintStart_toStartOf="@+id/startGuidLine"
+                app:layout_constraintTop_toBottomOf="@+id/btnBackup" />
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -55,5 +55,11 @@ public class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         return db.getReference(USER_DB_PATH).child(id);
     }
 
-
+    @Override
+    public String getCurrentUserEmail() {
+        if(auth.getCurrentUser()!= null){
+            return auth.getCurrentUser().getEmail();
+        }
+        return "-";
+    }
 }

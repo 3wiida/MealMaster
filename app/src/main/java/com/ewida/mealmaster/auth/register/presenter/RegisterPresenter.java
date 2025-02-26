@@ -66,7 +66,6 @@ public class RegisterPresenter implements RegisterContracts.Presenter {
         repo.saveUserData(user).addOnSuccessListener(unused -> {
             repo.setCurrentUserName(user.getName());
             repo.setCurrentUserId(user.getId());
-            repo.setAfterAuth(true);
             registerView.navigateToHomeScreen();
         }).addOnFailureListener(error -> {
             registerView.showErrorMessage(error.getMessage());
