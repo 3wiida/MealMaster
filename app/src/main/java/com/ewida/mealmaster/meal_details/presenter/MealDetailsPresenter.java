@@ -13,16 +13,13 @@ public class MealDetailsPresenter implements MealDetailsContracts.Presenter {
 
     private final MealDetailsContracts.View view;
     private final MealsRepository mealsRepo;
-    private final UserRepository userRepo;
 
     public MealDetailsPresenter(
             MealDetailsContracts.View view,
-            MealsRepository mealsRepo,
-            UserRepository userRepo
+            MealsRepository mealsRepo
     ) {
         this.view = view;
         this.mealsRepo = mealsRepo;
-        this.userRepo = userRepo;
     }
 
     @SuppressLint("CheckResult")
@@ -37,7 +34,6 @@ public class MealDetailsPresenter implements MealDetailsContracts.Presenter {
     @SuppressLint("CheckResult")
     @Override
     public void saveMeal(Meal meal) {
-        meal.setUserId(userRepo.getCurrentUserId());
         mealsRepo.saveMeal(meal).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 () -> view.showMessage("Meal saved successfully"),
                 error -> view.showMessage("Can't save meal right now, try again later")
@@ -47,7 +43,6 @@ public class MealDetailsPresenter implements MealDetailsContracts.Presenter {
     @SuppressLint("CheckResult")
     @Override
     public void unSaveMeal(Meal meal) {
-        meal.setUserId(userRepo.getCurrentUserId());
         mealsRepo.unSaveMeal(meal).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 () -> view.showMessage("Meal unsaved successfully"),
                 error -> view.showMessage("Can't remove the meal right now, try again later")
@@ -57,20 +52,15 @@ public class MealDetailsPresenter implements MealDetailsContracts.Presenter {
     @SuppressLint("CheckResult")
     @Override
     public void isMealSaved(String mealId) {
-        mealsRepo.isMealSaved(
-                mealId,
-                userRepo.getCurrentUserId()
-        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(view::setSavedIcon);
+        mealsRepo.isMealSaved(mealId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                view::setSavedIcon
+        );
     }
 
     @SuppressLint("CheckResult")
     @Override
     public void planMeal(Meal meal, String date) {
-        meal.setUserId(userRepo.getCurrentUserId());
-        Plan plan = new Plan(
-                date,
-                meal
-        );
+        Plan plan = new Plan(date, meal);
         mealsRepo.planMeal(plan).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 () -> view.showMessage("You planned this meal on " + date),
                 error -> view.showMessage(error.getMessage())

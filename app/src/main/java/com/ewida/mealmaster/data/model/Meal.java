@@ -12,14 +12,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(tableName = "SAVED_MEALS",primaryKeys = {"userId","idMeal"})
+@Entity(tableName = "SAVED_MEALS",primaryKeys = {"idMeal"})
 public class Meal implements Parcelable, Serializable {
 
     public Meal() {
     }
 
-    @NonNull
-    private String userId;
     @NonNull
     private String idMeal;
     private String strIngredient10;
@@ -526,14 +524,6 @@ public class Meal implements Parcelable, Serializable {
         this.strIngredient17 = strIngredient17;
     }
 
-    @NonNull
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(@NonNull String userId) {
-        this.userId = userId;
-    }
 
     public void setStrArea(String strArea) {
         this.strArea = strArea;

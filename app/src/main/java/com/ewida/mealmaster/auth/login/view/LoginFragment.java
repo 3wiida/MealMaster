@@ -19,8 +19,12 @@ import android.view.ViewGroup;
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.auth.login.LoginContracts;
 import com.ewida.mealmaster.auth.login.presenter.LoginPresenter;
+import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.local.UserLocalDataSourceImpl;
+import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSource;
+import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSourceImpl;
+import com.ewida.mealmaster.data.repository.meals_repo.MealsRepositoryImpl;
 import com.ewida.mealmaster.data.repository.user_repo.UserRepositoryImpl;
 import com.ewida.mealmaster.databinding.FragmentLoginBinding;
 import com.ewida.mealmaster.main.MainActivity;
@@ -44,6 +48,10 @@ public class LoginFragment extends Fragment implements LoginContracts.View {
 
         presenter = new LoginPresenter(
                 this,
+                MealsRepositoryImpl.getInstance(
+                        MealsRemoteDataSourceImpl.getInstance(),
+                        MealsLocalDataSourceImpl.getInstance(requireActivity())
+                ),
                 UserRepositoryImpl.getInstance(
                         UserRemoteDataSourceImpl.getInstance(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance()),
                         UserLocalDataSourceImpl.getInstance(requireContext())

@@ -17,20 +17,38 @@ import io.reactivex.rxjava3.core.Single;
 
 public interface MealsRepository {
     Single<MealResponse> getRandomMeal();
-    Single<CategoryMealsResponse> getCategoryMeals( String category);
+
+    Single<CategoryMealsResponse> getCategoryMeals(String category);
+
     Single<CategoryMealsResponse> getAreaMeals(String area);
+
     Single<CategoryMealsResponse> getIngredientMeals(String ingredient);
+
     Single<MealResponse> getMealById(String id);
+
     Single<MealResponse> search(String query);
+
     Single<CategoriesResponse> getAllCategories();
+
     Single<AreasResponse> getAllAreas();
+
     Single<IngredientsResponse> getAllIngredients();
+
     Completable saveMeal(Meal meal);
+
     Completable unSaveMeal(Meal meal);
-    Single<Boolean> isMealSaved(String mealId, String userId);
-    Flowable<List<Meal>> getSavedMeals(String userId, boolean isAfterAuth);
+
+    Single<Boolean> isMealSaved(String mealId);
+
+    Flowable<List<Meal>> getSavedMeals();
+
     Completable planMeal(Plan plan);
-    Completable planMeals(List<Plan> plans);
+
     Completable unPlanMeal(Plan plan);
-    Flowable<List<Plan>> getPlanedMeals(String userId, String date);
+
+    Flowable<List<Plan>> getPlanedMeals(String date);
+
+    Completable syncUserData(String userId);
+
+    Single<List<Plan>> getAllPlans();
 }

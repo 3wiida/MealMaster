@@ -20,4 +20,5 @@ public interface MealsRemoteDataSource {
     Single<AreasResponse> getAllAreas();
     Single<IngredientsResponse> getAllIngredients();
     DatabaseReference getSavedMeals(String userId);
+    DatabaseReference getPlannedMeals(String userId);
 }

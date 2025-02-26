@@ -5,9 +5,8 @@ import androidx.room.Embedded;
 import androidx.room.Entity;
 
 
-@Entity(tableName = "PLANS", primaryKeys = {"userId", "idMeal", "date"})
+@Entity(tableName = "PLANS", primaryKeys = {"idMeal", "date"})
 public class Plan {
-
 
     @NonNull
     private String date;
@@ -15,6 +14,9 @@ public class Plan {
     @Embedded
     @NonNull
     private Meal meal;
+
+    public Plan() {
+    }
 
     public Plan(@NonNull String date, @NonNull Meal meal) {
         this.date = date;

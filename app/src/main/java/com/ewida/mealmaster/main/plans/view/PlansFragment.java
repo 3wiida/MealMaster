@@ -1,5 +1,7 @@
 package com.ewida.mealmaster.main.plans.view;
 
+import static com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSourceImpl.USER_DB_PATH;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,11 +44,14 @@ import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class PlansFragment extends Fragment implements PlannedMealsContracts.View, DayViewContainer.OnDayClickListener, PlannedMealsAdapter.OnMealClickListener {
 
+    private PlannedMealsContracts.presenter presenter;
     private FragmentPlansBinding binding;
     private PlannedMealsAdapter adapter;
-    private PlannedMealsContracts.presenter presenter;
     private LocalDate selectedDate;
 
 
@@ -62,15 +67,17 @@ public class PlansFragment extends Fragment implements PlannedMealsContracts.Vie
         selectedDate = LocalDate.now();
         presenter = new PlannedMealsPresenter(
                 this,
-                MealsRepositoryImpl.getInstance(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(requireActivity())),
-                UserRepositoryImpl.getInstance(UserRemoteDataSourceImpl.getInstance(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance()), UserLocalDataSourceImpl.getInstance(requireActivity()))
+                MealsRepositoryImpl.getInstance(
+                        MealsRemoteDataSourceImpl.getInstance(),
+                        MealsLocalDataSourceImpl.getInstance(requireActivity())
+                )
         );
         String date = selectedDate.getDayOfMonth() + "-" + selectedDate.getMonthValue() + "-" + selectedDate.getYear();
         presenter.getPlannedMeals(date);
         initViews();
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "CheckResult"})
     private void initViews() {
         setupCalendar();
         adapter = new PlannedMealsAdapter(this);
@@ -78,6 +85,31 @@ public class PlansFragment extends Fragment implements PlannedMealsContracts.Vie
         int day = selectedDate.getDayOfMonth();
         String month = selectedDate.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
         binding.tvMealsLabel.setText(day + "th of " + month + " Meals");
+        //TODO remove the following click listener it's a test
+        binding.tvMealsLabel.setOnClickListener(mView -> {
+            FirebaseDatabase.getInstance().getReference()
+                    .child(USER_DB_PATH)
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child("Plans")
+                    .removeValue().addOnSuccessListener(unused -> {
+                        MealsLocalDataSourceImpl.getInstance(requireContext()).getAllPlans()
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        plans->{
+                                            plans.forEach(plan->{
+                                                FirebaseDatabase.getInstance().getReference()
+                                                        .child(USER_DB_PATH)
+                                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                        .child("Plans")
+                                                        .child(plan.getMeal().getIdMeal()+plan.getDate())
+                                                        .setValue(plan);
+                                            });
+                                        },
+                                        error-> {}
+                                );
+                    });
+        });
     }
 
     private void setupCalendar() {

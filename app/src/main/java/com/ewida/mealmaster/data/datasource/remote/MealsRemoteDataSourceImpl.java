@@ -105,4 +105,9 @@ public class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
     public DatabaseReference getSavedMeals(String userId) {
         return db.getReference().child(USER_DB_PATH).child(userId).child("Saved");
     }
+
+    @Override
+    public DatabaseReference getPlannedMeals(String userId) {
+        return db.getReference().child(USER_DB_PATH).child(userId).child("Plans");
+    }
 }

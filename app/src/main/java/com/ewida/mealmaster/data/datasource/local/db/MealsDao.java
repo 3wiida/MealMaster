@@ -21,7 +21,7 @@ public interface MealsDao {
     Completable saveMeal(Meal meal);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertMeals(List<Meal> meals);
+    Completable insertMeals(List<Meal> meals);
 
     @Delete
     Completable unSaveMeal(Meal meal);
@@ -30,19 +30,20 @@ public interface MealsDao {
     Completable planMeal(Plan plan);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void planMeals(List<Plan> plans);
+    Completable planMeals(List<Plan> plans);
 
     @Delete
     Completable unPlanMeal(Plan plan);
 
-    @Query("SELECT EXISTS(SELECT 1 FROM SAVED_MEALS WHERE idMeal= :mealId and userId = :userId)")
-    Single<Boolean> isMealSaved(String mealId, String userId);
+    @Query("SELECT EXISTS(SELECT 1 FROM SAVED_MEALS WHERE idMeal= :mealId)")
+    Single<Boolean> isMealSaved(String mealId);
 
-    @Query("SELECT * FROM SAVED_MEALS WHERE userId = :userId")
-    Flowable<List<Meal>> getSavedMeals(String userId);
+    @Query("SELECT * FROM SAVED_MEALS")
+    Flowable<List<Meal>> getSavedMeals();
 
-    @Query("SELECT * FROM PLANS WHERE userId = :userId and date= :date")
-    Flowable<List<Plan>> getPlanedMeals(String userId, String date);
+    @Query("SELECT * FROM PLANS WHERE date= :date")
+    Flowable<List<Plan>> getPlanedMeals(String date);
 
-
+    @Query("SELECT * FROM PLANS")
+    Single<List<Plan>> getAllPlans();
 }

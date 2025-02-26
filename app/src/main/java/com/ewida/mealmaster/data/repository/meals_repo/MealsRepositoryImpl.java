@@ -1,7 +1,6 @@
 package com.ewida.mealmaster.data.repository.meals_repo;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSource;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSource;
@@ -12,16 +11,15 @@ import com.ewida.mealmaster.data.model.IngredientsResponse;
 import com.ewida.mealmaster.data.model.Meal;
 import com.ewida.mealmaster.data.model.MealResponse;
 import com.ewida.mealmaster.data.model.Plan;
-import com.ewida.mealmaster.utils.NetworkUtils;
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MealsRepositoryImpl implements MealsRepository {
 
@@ -97,14 +95,14 @@ public class MealsRepositoryImpl implements MealsRepository {
     }
 
     @Override
-    public Single<Boolean> isMealSaved(String mealId, String userId) {
-        return localDataSource.isMealSaved(mealId, userId);
+    public Single<Boolean> isMealSaved(String mealId) {
+        return localDataSource.isMealSaved(mealId);
     }
 
     @SuppressLint("CheckResult")
     @Override
-    public Flowable<List<Meal>> getSavedMeals(String userId, boolean isAfterAuth) {
-        return Flowable.create(emitter -> {
+    public Flowable<List<Meal>> getSavedMeals() {
+        /*return Flowable.create(emitter -> {
             if (!NetworkUtils.isNetworkAvailable()) {
                 Log.d("```TAG```", "getSavedMeals: no network");
                 localDataSource.getSavedMeals(userId).subscribe(
@@ -134,7 +132,52 @@ public class MealsRepositoryImpl implements MealsRepository {
                     localDataSource.getSavedMeals(userId).subscribe(emitter::onNext, emitter::onError);
                 }
             }
-        }, BackpressureStrategy.DROP);
+        }, BackpressureStrategy.DROP);*/
+        return localDataSource.getSavedMeals();
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public Completable syncUserData(String userId) {
+        return Completable.create(emitter -> {
+            remoteDataSource.getSavedMeals(userId).get().addOnSuccessListener(mealsSnapshot -> {
+                List<Meal> savedMeals = buildSavedMealsList(mealsSnapshot);
+                localDataSource.saveMeals(savedMeals).subscribeOn(Schedulers.io()).subscribe(
+                        ()->{
+                            remoteDataSource.getPlannedMeals(userId).get().addOnSuccessListener(plansSnapshot -> {
+                                List<Plan> plans = buildPlansList(plansSnapshot);
+                                localDataSource.planMeals(plans).subscribeOn(Schedulers.io()).subscribe(
+                                        emitter::onComplete,
+                                        emitter::onError
+                                );
+                            }).addOnFailureListener(emitter::onError);
+                        },
+                        emitter::onError
+                );
+            }).addOnFailureListener(emitter::onError);
+        });
+    }
+
+    private List<Meal> buildSavedMealsList(DataSnapshot dataSnapshot){
+        List<Meal> meals = new ArrayList<>();
+        for (DataSnapshot mealSnapshot : dataSnapshot.getChildren()) {
+            Meal meal = mealSnapshot.getValue(Meal.class);
+            if (meal != null) {
+                meals.add(meal);
+            }
+        }
+        return meals;
+    }
+
+    private List<Plan> buildPlansList(DataSnapshot dataSnapshot){
+        List<Plan> plans = new ArrayList<>();
+        for (DataSnapshot mealSnapshot : dataSnapshot.getChildren()) {
+            Plan plan = mealSnapshot.getValue(Plan.class);
+            if (plan != null) {
+                plans.add(plan);
+            }
+        }
+        return plans;
     }
 
     @Override
@@ -143,17 +186,17 @@ public class MealsRepositoryImpl implements MealsRepository {
     }
 
     @Override
-    public Completable planMeals(List<Plan> plans) {
-        return localDataSource.planMeals(plans);
-    }
-
-    @Override
     public Completable unPlanMeal(Plan plan) {
         return localDataSource.unPlanMeal(plan);
     }
 
     @Override
-    public Flowable<List<Plan>> getPlanedMeals(String userId, String date) {
-        return localDataSource.getPlanedMeals(userId, date);
+    public Flowable<List<Plan>> getPlanedMeals(String date) {
+        return localDataSource.getPlanedMeals(date);
+    }
+
+    @Override
+    public Single<List<Plan>> getAllPlans() {
+        return localDataSource.getAllPlans();
     }
 }

@@ -56,10 +56,6 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 MealsRepositoryImpl.getInstance(
                         MealsRemoteDataSourceImpl.getInstance(),
                         MealsLocalDataSourceImpl.getInstance(this)
-                ),
-                UserRepositoryImpl.getInstance(
-                        UserRemoteDataSourceImpl.getInstance(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance()),
-                        UserLocalDataSourceImpl.getInstance(this)
                 )
         );
 

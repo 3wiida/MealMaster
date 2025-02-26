@@ -79,7 +79,7 @@ public class SavedFragment extends Fragment implements SavedMealsContracts.View,
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .child("Saved")
                                     .child(meal.getIdMeal())
-                                    .setValue( meal);
+                                    .setValue(meal);
                         });
                     });
         });

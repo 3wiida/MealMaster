@@ -12,7 +12,6 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     private final MealsDao dao;
@@ -40,19 +39,18 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     }
 
     @Override
-    public Single<Boolean> isMealSaved(String mealId, String userId) {
-        return dao.isMealSaved(mealId, userId);
+    public Single<Boolean> isMealSaved(String mealId) {
+        return dao.isMealSaved(mealId);
     }
 
     @Override
-    public Flowable<List<Meal>> getSavedMeals(String userId) {
-        return dao.getSavedMeals(userId);
+    public Flowable<List<Meal>> getSavedMeals() {
+        return dao.getSavedMeals();
     }
 
     @Override
     public Completable saveMeals(List<Meal> meals) {
-        return Completable.fromAction(() -> dao.insertMeals(meals))
-                .subscribeOn(Schedulers.io());
+        return dao.insertMeals(meals);
     }
 
     @Override
@@ -62,8 +60,7 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
 
     @Override
     public Completable planMeals(List<Plan> plans) {
-        return Completable.fromAction(() -> dao.planMeals(plans))
-                .subscribeOn(Schedulers.io());
+        return dao.planMeals(plans);
     }
 
     @Override
@@ -72,7 +69,12 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     }
 
     @Override
-    public Flowable<List<Plan>> getPlanedMeals(String userId, String date) {
-        return dao.getPlanedMeals(userId, date);
+    public Flowable<List<Plan>> getPlanedMeals(String date) {
+        return dao.getPlanedMeals(date);
+    }
+
+    @Override
+    public Single<List<Plan>> getAllPlans() {
+        return dao.getAllPlans();
     }
 }
