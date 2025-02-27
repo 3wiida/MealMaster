@@ -80,4 +80,6 @@
     <string name="logout">Logout</string>
     <string name="logout_warning">Ensure you back up your data before logging out, as it will be lost without a backup.</string>
     <string name="cancel">Cancel</string>
+    <string name="categories">Categories</string>
+    <string name="areas">Areas</string>
 </resources>

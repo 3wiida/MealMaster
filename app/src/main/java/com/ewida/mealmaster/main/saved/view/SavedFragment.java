@@ -1,6 +1,5 @@
 package com.ewida.mealmaster.main.saved.view;
 
-import static com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSourceImpl.USER_DB_PATH;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +9,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.auth.AuthActivity;
@@ -24,18 +21,14 @@ import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.model.Meal;
 import com.ewida.mealmaster.data.repository.meals_repo.MealsRepositoryImpl;
-import com.ewida.mealmaster.data.repository.user_repo.UserRepository;
 import com.ewida.mealmaster.data.repository.user_repo.UserRepositoryImpl;
 import com.ewida.mealmaster.databinding.FragmentSavedBinding;
 import com.ewida.mealmaster.main.saved.SavedMealsContracts;
 import com.ewida.mealmaster.main.saved.presenter.SavedMealsPresenter;
 import com.ewida.mealmaster.meal_details.view.MealDetailsActivity;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +38,6 @@ public class SavedFragment extends Fragment implements SavedMealsContracts.View,
     private FragmentSavedBinding binding;
     private SavedMealsContracts.Presenter presenter;
     private SavedMealsAdapter adapter;
-    private List<Meal> meals;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,23 +60,6 @@ public class SavedFragment extends Fragment implements SavedMealsContracts.View,
                 )
         );
         initViews();
-        //todo this is a temp code to try backup remove it
-        binding.tvSavedLabel.setOnClickListener(mView -> {
-            FirebaseDatabase.getInstance().getReference()
-                    .child(USER_DB_PATH)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .child("Saved")
-                    .removeValue().addOnSuccessListener(unused -> {
-                        meals.forEach(meal->{
-                            FirebaseDatabase.getInstance().getReference()
-                                    .child(USER_DB_PATH)
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .child("Saved")
-                                    .child(meal.getIdMeal())
-                                    .setValue(meal);
-                        });
-                    });
-        });
     }
 
     @Override
@@ -118,7 +93,6 @@ public class SavedFragment extends Fragment implements SavedMealsContracts.View,
     public void showSavedMeals(List<Meal> meals) {
         binding.progressBar.setVisibility(View.GONE);
         binding.emptyState.setVisibility(View.GONE);
-        this.meals = meals;
         List<Meal> newList = new ArrayList<>(meals);
         adapter.submitList(newList);
     }

@@ -59,7 +59,6 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         public void bind(ExploreItem item){
             Glide.with(binding.ivItemThumb)
                     .load(item.getThumbnail())
-                    .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.ivItemThumb);

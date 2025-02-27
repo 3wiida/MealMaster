@@ -72,6 +72,14 @@ public class Area {
                 return "tr";
             case "vietnamese":
                 return "vn";
+            case "filipino":
+                return "ph";
+            case "norwegian":
+                return "no";
+            case "ukrainian":
+                return "ua";
+            case "uruguayan":
+                return "uy";
             default:
                 return "x";
         }

@@ -7,6 +7,7 @@ public interface ProfileContracts {
         void getUserProfile();
         void backupUserData();
         void logout();
+        boolean isGuest();
     }
     interface View{
         void showUserData(Profile userProfile);

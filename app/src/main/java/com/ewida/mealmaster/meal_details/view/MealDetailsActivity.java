@@ -6,7 +6,6 @@ import static android.view.View.VISIBLE;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
@@ -56,11 +55,22 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 MealsRepositoryImpl.getInstance(
                         MealsRemoteDataSourceImpl.getInstance(),
                         MealsLocalDataSourceImpl.getInstance(this)
+                ),
+                UserRepositoryImpl.getInstance(
+                        UserRemoteDataSourceImpl.getInstance(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance()),
+                        UserLocalDataSourceImpl.getInstance(this),
+                        MealsLocalDataSourceImpl.getInstance(this)
                 )
         );
-
+        initViews();
         initClicks();
         getMeal(getIntent().getStringExtra(MEAL_ID_EXTRA));
+    }
+
+    private void initViews() {
+        boolean isGuest = presenter.isGuest();
+        binding.saveCard.setVisibility(isGuest ? GONE : VISIBLE);
+        binding.planCard.setVisibility(isGuest ? GONE : VISIBLE);
     }
 
     private void initClicks() {

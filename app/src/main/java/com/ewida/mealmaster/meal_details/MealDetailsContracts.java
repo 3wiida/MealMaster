@@ -15,6 +15,8 @@ public interface MealDetailsContracts {
         void isMealSaved(String mealId);
 
         void planMeal(Meal meal, String date);
+
+        boolean isGuest();
     }
 
     interface View {

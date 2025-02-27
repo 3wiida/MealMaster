@@ -44,4 +44,9 @@ public class ProfilePresenter implements ProfileContracts.Presenter {
                 error-> view.showMessage("An error occured while logging out, try again later")
         );
     }
+
+    @Override
+    public boolean isGuest() {
+        return userRepo.getCurrentUserId() == null;
+    }
 }

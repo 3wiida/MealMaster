@@ -13,13 +13,16 @@ public class MealDetailsPresenter implements MealDetailsContracts.Presenter {
 
     private final MealDetailsContracts.View view;
     private final MealsRepository mealsRepo;
+    private final UserRepository userRepo;
 
     public MealDetailsPresenter(
             MealDetailsContracts.View view,
-            MealsRepository mealsRepo
+            MealsRepository mealsRepo,
+            UserRepository userRepo
     ) {
         this.view = view;
         this.mealsRepo = mealsRepo;
+        this.userRepo = userRepo;
     }
 
     @SuppressLint("CheckResult")
@@ -65,5 +68,10 @@ public class MealDetailsPresenter implements MealDetailsContracts.Presenter {
                 () -> view.showMessage("You planned this meal on " + date),
                 error -> view.showMessage(error.getMessage())
         );
+    }
+
+    @Override
+    public boolean isGuest() {
+        return userRepo.getCurrentUserId() == null;
     }
 }

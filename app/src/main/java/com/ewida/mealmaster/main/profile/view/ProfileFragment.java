@@ -1,5 +1,8 @@
 package com.ewida.mealmaster.main.profile.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -50,7 +53,12 @@ public class ProfileFragment extends Fragment implements ProfileContracts.View, 
                 )
         );
         presenter.getUserProfile();
+        initViews();
         initClicks();
+    }
+
+    private void initViews() {
+        binding.btnBackup.setVisibility(presenter.isGuest() ? GONE : VISIBLE);
     }
 
     private void initClicks() {
