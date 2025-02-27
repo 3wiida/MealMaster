@@ -52,12 +52,12 @@ public class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
     @Override
     public Task<Void> insertUser(User user) {
-        return db.getReference().child(USER_DB_PATH).child(user.getId()).setValue(user);
+        return db.getReference().child(USER_DB_PATH).child(user.getId()).child("UserData").setValue(user);
     }
 
     @Override
     public DatabaseReference getUserByID(String id) {
-        return db.getReference(USER_DB_PATH).child(id);
+        return db.getReference(USER_DB_PATH).child(id).child("UserData");
     }
 
     @Override

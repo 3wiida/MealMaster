@@ -14,4 +14,5 @@ public interface FirebaseDatabaseContract {
     DatabaseReference getUserByID(String id);
 
     void updateUserData(List<Meal> meals, List<Plan> plans);
+
 }

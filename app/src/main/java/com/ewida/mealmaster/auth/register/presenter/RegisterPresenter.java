@@ -1,13 +1,13 @@
 package com.ewida.mealmaster.auth.register.presenter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import androidx.databinding.ObservableArrayList;
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.auth.register.RegisterContracts;
-import com.ewida.mealmaster.data.datasource.remote.firebase.auth.FirebaseAuthContract;
-import com.ewida.mealmaster.data.datasource.remote.firebase.database.FirebaseDatabaseContract;
 import com.ewida.mealmaster.data.model.User;
+import com.ewida.mealmaster.data.repository.meals_repo.MealsRepository;
 import com.ewida.mealmaster.data.repository.user_repo.UserRepository;
 import com.ewida.mealmaster.utils.Constants;
 import com.ewida.mealmaster.utils.enums.FormErrors;
@@ -17,15 +17,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class RegisterPresenter implements RegisterContracts.Presenter {
 
     private final RegisterContracts.View registerView;
-    private final UserRepository repo;
+    private final UserRepository userRepo;
+    private final MealsRepository mealsRepo;
     private final ObservableArrayList<FormErrors> registerFormErrors;
 
-    public RegisterPresenter(RegisterContracts.View registerView, UserRepository repo) {
+    public RegisterPresenter(RegisterContracts.View registerView, UserRepository repo, MealsRepository mealsRepo) {
         this.registerView = registerView;
-        this.repo = repo;
+        this.userRepo = repo;
+        this.mealsRepo = mealsRepo;
         this.registerFormErrors = new ObservableArrayList<>();
     }
 
@@ -56,20 +61,28 @@ public class RegisterPresenter implements RegisterContracts.Presenter {
     }
 
     private void registerWithEmailAndPassword(String fullName, String email, String password) {
-        repo.register(email, password).addOnSuccessListener(authResult -> {
+        userRepo.register(email, password).addOnSuccessListener(authResult -> {
             User user = new User(authResult.getUser().getUid(), fullName);
             insertUserInDatabase(user);
         }).addOnFailureListener(error -> registerView.showErrorMessage(error.getMessage()));
     }
 
     private void insertUserInDatabase(User user) {
-        repo.saveUserData(user).addOnSuccessListener(unused -> {
-            repo.setCurrentUserName(user.getName());
-            repo.setCurrentUserId(user.getId());
-            registerView.navigateToHomeScreen();
+        userRepo.saveUserData(user).addOnSuccessListener(unused -> {
+            userRepo.setCurrentUserName(user.getName());
+            userRepo.setCurrentUserId(user.getId());
+            syncUserData(user.getId());
         }).addOnFailureListener(error -> {
             registerView.showErrorMessage(error.getMessage());
         });
+    }
+
+    @SuppressLint("CheckResult")
+    private void syncUserData(String userId) {
+        mealsRepo.syncUserData(userId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                registerView::navigateToHomeScreen,
+                error -> registerView.showErrorMessage(error.getMessage())
+        );
     }
 
     @Override
@@ -85,9 +98,9 @@ public class RegisterPresenter implements RegisterContracts.Presenter {
     public void handleGoogleAuthResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            repo.authWithGoogle(account).addOnSuccessListener(authResult -> {
-                repo.setCurrentUserName(authResult.getUser().getDisplayName());
-                repo.setCurrentUserId(authResult.getUser().getUid());
+            userRepo.authWithGoogle(account).addOnSuccessListener(authResult -> {
+                userRepo.setCurrentUserName(authResult.getUser().getDisplayName());
+                userRepo.setCurrentUserId(authResult.getUser().getUid());
                 insertUserInDatabase(new User(authResult.getUser().getUid(),authResult.getUser().getDisplayName()));
             }).addOnFailureListener(error -> registerView.showErrorMessage(error.getMessage()));
         } catch (ApiException exception) {
