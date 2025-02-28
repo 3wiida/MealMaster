@@ -80,6 +80,7 @@ public class ProfileFragment extends Fragment implements ProfileContracts.View, 
 
     @Override
     public void showMessage(String msg) {
+        binding.btnBackup.setLoading(false);
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT).show();
     }
 

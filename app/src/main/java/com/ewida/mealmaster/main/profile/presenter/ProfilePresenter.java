@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import com.ewida.mealmaster.data.repository.user_repo.UserRepository;
 import com.ewida.mealmaster.main.profile.ProfileContracts;
+import com.ewida.mealmaster.utils.NetworkUtils;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
@@ -30,10 +31,14 @@ public class ProfilePresenter implements ProfileContracts.Presenter {
     @SuppressLint("CheckResult")
     @Override
     public void backupUserData() {
-        userRepo.backupUserData().observeOn(AndroidSchedulers.mainThread()).subscribe(
-                view::onBackupCompleted,
-                error-> view.showMessage(error.getMessage())
-        );
+        if(NetworkUtils.isNetworkAvailable()){
+            userRepo.backupUserData().observeOn(AndroidSchedulers.mainThread()).subscribe(
+                    view::onBackupCompleted,
+                    error-> view.showMessage(error.getMessage())
+            );
+        }else{
+            view.showMessage("Can't backup your data, no internet connection");
+        }
     }
 
     @SuppressLint("CheckResult")

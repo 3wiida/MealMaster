@@ -21,7 +21,6 @@ import com.ewida.mealmaster.auth.login.LoginContracts;
 import com.ewida.mealmaster.auth.login.presenter.LoginPresenter;
 import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.local.UserLocalDataSourceImpl;
-import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSource;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.repository.meals_repo.MealsRepositoryImpl;
@@ -130,7 +129,7 @@ public class LoginFragment extends Fragment implements LoginContracts.View {
     public void showErrorMessage(String msg) {
         Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_LONG).show();
         binding.btnLogin.setLoading(false);
-        binding.btnGoogleLogin.setLoading(true);
+        binding.btnGoogleLogin.setLoading(false);
         binding.btnSkip.setClickable(true);
         binding.btnSignup.setClickable(true);
     }
