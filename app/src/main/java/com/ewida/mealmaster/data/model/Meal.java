@@ -2,6 +2,7 @@ package com.ewida.mealmaster.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.Entity;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(tableName = "SAVED_MEALS",primaryKeys = {"idMeal"})
+@Entity(tableName = "SAVED_MEALS", primaryKeys = {"idMeal"})
 public class Meal implements Parcelable, Serializable {
 
     public Meal() {
@@ -321,8 +322,10 @@ public class Meal implements Parcelable, Serializable {
 
     public String getStrYoutube() {
         if (this.strYoutube != null) {
-            if(!this.strYoutube.trim().isEmpty()){
-                return this.strYoutube.split("v=")[0];
+            if (!this.strYoutube.trim().isEmpty()) {
+                if (this.strYoutube.split("v=").length == 2){
+                    return this.strYoutube.split("v=")[1];
+                };
             }
         }
         return null;

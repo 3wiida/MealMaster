@@ -8,6 +8,7 @@ import static androidx.core.content.ContentProviderCompat.requireContext;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
@@ -148,6 +149,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     }
 
     private void initVideoPlayer(String videoId) {
+        Log.d("```TAG```", "initVideoPlayer: "+videoId);
         binding.youtubeVideoPlayer.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {

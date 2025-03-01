@@ -2,7 +2,6 @@ package com.ewida.mealmaster.main.home.view;
 
 import static android.view.View.VISIBLE;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -33,7 +32,6 @@ import com.ewida.mealmaster.main.home.HomeContracts;
 import com.ewida.mealmaster.main.home.presenter.HomePresenter;
 import com.ewida.mealmaster.meal_details.view.MealDetailsActivity;
 import com.ewida.mealmaster.search.view.SearchActivity;
-import com.ewida.mealmaster.utils.Constants;
 import com.ewida.mealmaster.utils.NetworkUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;

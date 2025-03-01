@@ -5,7 +5,6 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -42,6 +41,8 @@ public class NetworkUtils extends ConnectivityManager.NetworkCallback {
         super.onLost(network);
         networkCallbacksListener.onConnectionUnAvailable();
     }
+
+
 
 
     public void register() {
