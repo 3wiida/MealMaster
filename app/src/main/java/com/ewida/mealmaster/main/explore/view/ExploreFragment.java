@@ -27,6 +27,7 @@ import com.ewida.mealmaster.explore_meals.ExploreMealsContracts;
 import com.ewida.mealmaster.explore_meals.view.ExploreMeals;
 import com.ewida.mealmaster.main.explore.ExploreContracts;
 import com.ewida.mealmaster.main.explore.presenter.ExplorePresenter;
+import com.ewida.mealmaster.utils.NetworkUtils;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
-public class ExploreFragment extends Fragment implements ExploreContracts.View {
+public class ExploreFragment extends Fragment implements ExploreContracts.View, NetworkUtils.NetworkCallbacksListener {
 
     private FragmentExploreBinding binding;
     private ExploreContracts.Presenter presenter;
@@ -44,6 +45,8 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
     private ExploreItemAdapter areasAdapter;
     private ExploreItemAdapter ingredientsAdapter;
     private SearchResultsAdapter searchResultsAdapter;
+    private NetworkUtils networkUtils;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         presenter = new ExplorePresenter(
                 this,
                 MealsRepositoryImpl.getInstance(
@@ -61,9 +65,11 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
                         MealsLocalDataSourceImpl.getInstance(requireContext())
                 )
         );
-        presenter.getAllCategories();
-        presenter.getAllAreas();
-        presenter.getAllIngredients();
+
+        if(!NetworkUtils.isNetworkAvailable()) onConnectionUnAvailable();
+        networkUtils = new NetworkUtils(requireContext(),this);
+        networkUtils.register();
+
         initViews();
         initClicks();
         initSearchObservable();
@@ -140,7 +146,7 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
             });
         });
 
-        searchObservable.debounce(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(query -> {
+        searchObservable.debounce(500, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(query -> {
             presenter.search(query, getExploreType());
         });
     }
@@ -180,6 +186,7 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
 
     @Override
     public void showAllCategories(List<ExploreItem> categories) {
+        networkUtils.unregister();
         categoriesAdapter.setList(categories);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             binding.rvCategories.setVisibility(View.VISIBLE);
@@ -243,8 +250,22 @@ public class ExploreFragment extends Fragment implements ExploreContracts.View {
 
     @Override
     public void onDestroyView() {
+        networkUtils.unregister();
         binding.etSearch.setText("");
         binding.searchChipGroup.check(binding.searchChipGroup.getChildAt(0).getId());
         super.onDestroyView();
     }
+
+    @Override
+    public void onConnectionAvailable() {
+        presenter.getAllCategories();
+        presenter.getAllAreas();
+        presenter.getAllIngredients();
+    }
+
+    @Override
+    public void onConnectionUnAvailable() {
+        Snackbar.make(binding.getRoot(), R.string.no_internet_connection_available, Snackbar.LENGTH_SHORT).show();
+    }
+
 }

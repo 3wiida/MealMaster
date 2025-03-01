@@ -1,4 +1,4 @@
-package com.ewida.mealmaster.main.home;
+package com.ewida.mealmaster.main.home.view;
 
 import static android.view.View.VISIBLE;
 
@@ -21,23 +21,32 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.ewida.mealmaster.R;
 import com.ewida.mealmaster.data.datasource.local.MealsLocalDataSourceImpl;
+import com.ewida.mealmaster.data.datasource.local.UserLocalDataSourceImpl;
 import com.ewida.mealmaster.data.datasource.remote.MealsRemoteDataSourceImpl;
+import com.ewida.mealmaster.data.datasource.remote.UserRemoteDataSourceImpl;
 import com.ewida.mealmaster.data.repository.meals_repo.MealsRepositoryImpl;
+import com.ewida.mealmaster.data.repository.user_repo.UserRepositoryImpl;
 import com.ewida.mealmaster.databinding.FragmentHomeBinding;
 import com.ewida.mealmaster.data.model.CategoryMeal;
 import com.ewida.mealmaster.data.model.Meal;
+import com.ewida.mealmaster.main.home.HomeContracts;
+import com.ewida.mealmaster.main.home.presenter.HomePresenter;
 import com.ewida.mealmaster.meal_details.view.MealDetailsActivity;
 import com.ewida.mealmaster.search.view.SearchActivity;
 import com.ewida.mealmaster.utils.Constants;
+import com.ewida.mealmaster.utils.NetworkUtils;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment implements HomeViewContract, HomeMealsAdapter.OnMealClickListener {
+public class HomeFragment extends Fragment implements HomeContracts.View, HomeMealsAdapter.OnMealClickListener, NetworkUtils.NetworkCallbacksListener {
 
     private FragmentHomeBinding binding;
-    private HomePresenterContract presenter;
+    private HomeContracts.Presenter presenter;
     private Meal randomMeal;
+    private NetworkUtils networkUtils;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +56,11 @@ public class HomeFragment extends Fragment implements HomeViewContract, HomeMeal
                 MealsRepositoryImpl.getInstance(
                         MealsRemoteDataSourceImpl.getInstance(),
                         MealsLocalDataSourceImpl.getInstance(requireContext())
+                ),
+                UserRepositoryImpl.getInstance(
+                        UserRemoteDataSourceImpl.getInstance(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance()),
+                        UserLocalDataSourceImpl.getInstance(requireActivity()),
+                        MealsLocalDataSourceImpl.getInstance(requireActivity())
                 )
         );
         return binding.getRoot();
@@ -55,11 +69,10 @@ public class HomeFragment extends Fragment implements HomeViewContract, HomeMeal
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter.getRandomMeal();
-        presenter.getVegetarianMeals();
-        presenter.getDesserts();
-        String username = getContext().getSharedPreferences(Constants.SharedPref.PREFS_FILE_NAME, Context.MODE_PRIVATE).getString(Constants.SharedPref.USER_NAME_KEY, "Anonymous Guest");
-        binding.tvUsername.setText(username);
+        presenter.getUsername();
+        if(!NetworkUtils.isNetworkAvailable()) onConnectionUnAvailable();
+        networkUtils = new NetworkUtils(requireContext(),this);
+        networkUtils.register();
         initClicks();
     }
 
@@ -76,8 +89,14 @@ public class HomeFragment extends Fragment implements HomeViewContract, HomeMeal
     }
 
     @Override
+    public void showUsername(String username) {
+        binding.tvUsername.setText(username);
+    }
+
+    @Override
     public void showRandomMeal(Meal meal) {
         this.randomMeal = meal;
+        networkUtils.unregister();
         Glide.with(binding.ivRadnomMeal)
                 .load(meal.getStrMealThumb())
                 .placeholder(R.drawable.image_placeholder)
@@ -124,5 +143,23 @@ public class HomeFragment extends Fragment implements HomeViewContract, HomeMeal
         Intent mealDetailsIntent = new Intent(getActivity(), MealDetailsActivity.class);
         mealDetailsIntent.putExtra(MealDetailsActivity.MEAL_ID_EXTRA, meal.getIdMeal());
         startActivity(mealDetailsIntent);
+    }
+
+    @Override
+    public void onConnectionAvailable() {
+        presenter.getRandomMeal();
+        presenter.getVegetarianMeals();
+        presenter.getDesserts();
+    }
+
+    @Override
+    public void onConnectionUnAvailable() {
+        Snackbar.make(binding.getRoot(), R.string.no_internet_connection_available, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        networkUtils.unregister();
     }
 }

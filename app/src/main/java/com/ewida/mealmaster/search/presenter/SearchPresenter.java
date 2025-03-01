@@ -1,8 +1,12 @@
 package com.ewida.mealmaster.search.presenter;
 
 import android.annotation.SuppressLint;
+
 import com.ewida.mealmaster.data.repository.meals_repo.MealsRepository;
 import com.ewida.mealmaster.search.SearchContracts;
+
+import java.io.IOException;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -31,7 +35,9 @@ public class SearchPresenter implements SearchContracts.Presenter {
                         view.showEmptyState();
                     }
                 },
-                error -> view.showErrorMessage(error.getMessage())
+                error -> {
+                    view.showErrorMessage(error instanceof IOException ? "No Internet connection available" : error.getMessage());
+                }
         );
     }
 }

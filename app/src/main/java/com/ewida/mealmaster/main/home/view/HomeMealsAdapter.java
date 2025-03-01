@@ -1,4 +1,4 @@
-package com.ewida.mealmaster.main.home;
+package com.ewida.mealmaster.main.home.view;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

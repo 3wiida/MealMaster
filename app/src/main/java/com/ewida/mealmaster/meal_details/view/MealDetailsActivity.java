@@ -3,6 +3,8 @@ package com.ewida.mealmaster.meal_details.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +28,7 @@ import com.ewida.mealmaster.data.repository.user_repo.UserRepositoryImpl;
 import com.ewida.mealmaster.databinding.ActivityMealDetailsBinding;
 import com.ewida.mealmaster.meal_details.MealDetailsContracts;
 import com.ewida.mealmaster.meal_details.presenter.MealDetailsPresenter;
+import com.ewida.mealmaster.utils.NetworkUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,13 +38,15 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import java.util.Calendar;
 import java.util.List;
 
-public class MealDetailsActivity extends AppCompatActivity implements MealDetailsContracts.View {
+public class MealDetailsActivity extends AppCompatActivity implements MealDetailsContracts.View, NetworkUtils.NetworkCallbacksListener {
 
     public static final String MEAL_ID_EXTRA = "MEAL_ID_EXTRA";
     public static final String MEAL_OBJECT_EXTRA = "MEAL_OBJECT_EXTRA";
     private ActivityMealDetailsBinding binding;
     private MealDetailsContracts.Presenter presenter;
+    private NetworkUtils networkUtils;
     private Meal meal;
+    private String mealId;
     private boolean isSaved;
 
     @Override
@@ -62,6 +67,10 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                         MealsLocalDataSourceImpl.getInstance(this)
                 )
         );
+
+        if (!NetworkUtils.isNetworkAvailable()) onConnectionUnAvailable();
+        networkUtils = new NetworkUtils(this, this);
+
         initViews();
         initClicks();
         getMeal(getIntent().getStringExtra(MEAL_ID_EXTRA));
@@ -96,13 +105,15 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 showMealDetails(meal);
             }
         } else {
-            presenter.getMealById(id);
+            mealId = id;
+            networkUtils.register();
         }
     }
 
     @Override
     public void showMealDetails(Meal meal) {
         this.meal = meal;
+        if (mealId != null) networkUtils.unregister();
         presenter.isMealSaved(meal.getIdMeal());
         Glide.with(binding.ivMealThumbnail)
                 .load(meal.getStrMealThumb())
@@ -175,4 +186,19 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         datePickerDialog.show();
     }
 
+    @Override
+    public void onConnectionAvailable() {
+        presenter.getMealById(mealId);
+    }
+
+    @Override
+    public void onConnectionUnAvailable() {
+        Snackbar.make(binding.getRoot(), R.string.no_internet_connection_available, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mealId != null) networkUtils.unregister();
+    }
 }
