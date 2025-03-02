@@ -83,4 +83,6 @@
     <string name="categories">Categories</string>
     <string name="areas">Areas</string>
     <string name="no_internet_connection_available">No internet connection available</string>
+    <string name="meal_unsaved_successfully">Meal unsaved successfully</string>
+    <string name="undo">Undo</string>
 </resources>

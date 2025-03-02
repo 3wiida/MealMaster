@@ -102,37 +102,6 @@ public class MealsRepositoryImpl implements MealsRepository {
     @SuppressLint("CheckResult")
     @Override
     public Flowable<List<Meal>> getSavedMeals() {
-        /*return Flowable.create(emitter -> {
-            if (!NetworkUtils.isNetworkAvailable()) {
-                Log.d("```TAG```", "getSavedMeals: no network");
-                localDataSource.getSavedMeals(userId).subscribe(
-                        emitter::onNext,
-                        emitter::onError
-                );
-            } else {
-                Log.d("```TAG```", "getSavedMeals: there is network");
-                if (isAfterAuth) {
-                    Log.d("```TAG```", "getSavedMeals: after auth");
-                    remoteDataSource.getSavedMeals(userId).get().addOnSuccessListener(dataSnapshot -> {
-                        List<Meal> meals = new ArrayList<>();
-                        for (DataSnapshot mealSnapshot : dataSnapshot.getChildren()) {
-                            Meal meal = mealSnapshot.getValue(Meal.class);
-                            if (meal != null) {
-                                meals.add(meal);
-                            }
-                        }
-
-                        localDataSource.saveMeals(meals).subscribe(
-                                () -> localDataSource.getSavedMeals(userId).subscribe(emitter::onNext, emitter::onError),
-                                emitter::onError
-                        );
-                    }).addOnFailureListener(emitter::onError);
-                } else {
-                    Log.d("```TAG```", "getSavedMeals: not after auth");
-                    localDataSource.getSavedMeals(userId).subscribe(emitter::onNext, emitter::onError);
-                }
-            }
-        }, BackpressureStrategy.DROP);*/
         return localDataSource.getSavedMeals();
     }
 

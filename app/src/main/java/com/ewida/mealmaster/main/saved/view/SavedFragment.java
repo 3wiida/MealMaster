@@ -111,8 +111,8 @@ public class SavedFragment extends Fragment implements SavedMealsContracts.View,
     @Override
     public void showUnsavedSnackBar(Meal meal) {
         Snackbar snackbar = Snackbar
-                .make(binding.getRoot(), "Meal unsaved successfully", Snackbar.LENGTH_LONG)
-                .setAction("Undo", view -> {
+                .make(binding.getRoot(), R.string.meal_unsaved_successfully, Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.undo), view -> {
                     presenter.saveMeal(meal);
                 });
         snackbar.show();
